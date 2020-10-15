@@ -10,28 +10,46 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="61dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="629dp"
         android:text="@string/textViewEan"
         android:textSize="24sp"
-        tools:layout_editor_absoluteX="29dp"
-        tools:layout_editor_absoluteY="70dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/plainTextEanView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/plainTextEanView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="117dp"
+        android:layout_marginTop="59dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="619dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="@string/plainTextEan"
         android:textSize="24sp"
-        tools:layout_editor_absoluteX="117dp"
-        tools:layout_editor_absoluteY="70dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonSpeichern"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="222dp"
+        android:layout_marginTop="200dp"
+        android:layout_marginEnd="37dp"
+        android:layout_marginBottom="357dp"
         android:text="@string/buttonSpeichern"
         android:textSize="24sp"
-        tools:layout_editor_absoluteX="191dp"
-        tools:layout_editor_absoluteY="471dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/plainTextEanView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
