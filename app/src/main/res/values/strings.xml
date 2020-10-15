@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">InventurProgramm</string>
+    <string name="textViewEan">EAN</string>
+    <string name="plainTextEan"></string>
+    <string name="buttonSpeichern">Speichern</string>
 </resources>
