@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         android:text="@string/textViewEan"
         android:textSize="24sp"
-        tools:layout_editor_absoluteX="67dp"
-        tools:layout_editor_absoluteY="148dp" />
+        tools:layout_editor_absoluteX="29dp"
+        tools:layout_editor_absoluteY="70dp" />
 
     <EditText
         android:id="@+id/editTextTextPersonName"
@@ -23,8 +23,8 @@
         android:inputType="textPersonName"
         android:text="@string/plainTextEan"
         android:textSize="24sp"
-        tools:layout_editor_absoluteX="156dp"
-        tools:layout_editor_absoluteY="141dp" />
+        tools:layout_editor_absoluteX="117dp"
+        tools:layout_editor_absoluteY="70dp" />
 
     <Button
         android:id="@+id/button"
@@ -32,6 +32,6 @@
         android:layout_height="wrap_content"
         android:text="@string/buttonSpeichern"
         android:textSize="24sp"
-        tools:layout_editor_absoluteX="371dp"
-        tools:layout_editor_absoluteY="571dp" />
+        tools:layout_editor_absoluteX="191dp"
+        tools:layout_editor_absoluteY="471dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
