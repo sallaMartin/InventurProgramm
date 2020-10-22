@@ -1,5 +1,7 @@
 <resources>
     <string name="textViewEan">EAN</string>
-    <string name="plainTextEan"></string>
+    <string name="leerText"></string>
     <string name="buttonSpeichern">Speichern</string>
+    <string name="textViewMenge">Menge</string>
+    <string name="textViewLagerort">Lagerort</string>
 </resources>

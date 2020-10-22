@@ -14,14 +14,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final EditText plainTextEan = (EditText) findViewById(R.id.plainTextEanView);
-        Button buttonSpeichern = (Button) findViewById(R.id.buttonSpeichern);
-
-        buttonSpeichern.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View arg0) {
-                plainTextEan.setText("Hello");
-            }
-        });
 
 
     }

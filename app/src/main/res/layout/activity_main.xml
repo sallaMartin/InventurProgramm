@@ -6,50 +6,94 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <EditText
+        android:id="@+id/plainTextEanView"
+        android:layout_width="383dp"
+        android:layout_height="46dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="@string/leerText"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="121dp" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="61dp"
-        android:layout_marginTop="70dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="629dp"
         android:text="@string/textViewEan"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/plainTextEanView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/plainTextEanView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="117dp"
-        android:layout_marginTop="59dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="619dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="@string/plainTextEan"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="30sp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="81dp" />
 
     <Button
         android:id="@+id/buttonSpeichern"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="222dp"
-        android:layout_marginTop="200dp"
-        android:layout_marginEnd="37dp"
-        android:layout_marginBottom="357dp"
         android:text="@string/buttonSpeichern"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/plainTextEanView" />
+        tools:layout_editor_absoluteX="17dp"
+        tools:layout_editor_absoluteY="532dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/textViewMenge"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="17dp"
+        tools:layout_editor_absoluteY="416dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/textViewLagerort"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="17dp"
+        tools:layout_editor_absoluteY="475dp" />
+
+    <EditText
+        android:id="@+id/editTextTextPersonName2"
+        android:layout_width="278dp"
+        android:layout_height="47dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="@string/leerText"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="117dp"
+        tools:layout_editor_absoluteY="469dp" />
+
+    <Spinner
+        android:id="@+id/spinner2"
+        android:layout_width="138dp"
+        android:layout_height="41dp"
+        tools:layout_editor_absoluteX="-2dp"
+        tools:layout_editor_absoluteY="675dp" />
+
+    <Spinner
+        android:id="@+id/spinner6"
+        android:layout_width="138dp"
+        android:layout_height="41dp"
+        tools:layout_editor_absoluteX="136dp"
+        tools:layout_editor_absoluteY="675dp" />
+
+    <Spinner
+        android:id="@+id/spinner7"
+        android:layout_width="138dp"
+        android:layout_height="41dp"
+        tools:layout_editor_absoluteX="274dp"
+        tools:layout_editor_absoluteY="675dp" />
+
+    <EditText
+        android:id="@+id/editTextTextPersonName3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="@string/leerText"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="117dp"
+        tools:layout_editor_absoluteY="403dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
