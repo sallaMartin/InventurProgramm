@@ -6,135 +6,156 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <EditText
-        android:id="@+id/plainTextEanView"
-        android:layout_width="383dp"
-        android:layout_height="46dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="@string/leerText"
-        android:textSize="24sp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="121dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/textViewEan"
-        android:textSize="30sp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="81dp" />
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.4"
+            android:orientation="vertical">
 
-    <Button
-        android:id="@+id/buttonSpeichernView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/buttonSpeichern"
-        android:textSize="24sp"
-        tools:layout_editor_absoluteX="17dp"
-        tools:layout_editor_absoluteY="532dp" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/textViewMenge"
-        android:textSize="24sp"
-        tools:layout_editor_absoluteX="17dp"
-        tools:layout_editor_absoluteY="416dp" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/textViewLagerort"
-        android:textSize="24sp"
-        tools:layout_editor_absoluteX="17dp"
-        tools:layout_editor_absoluteY="475dp" />
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/textViewEan"
+                android:textSize="30sp" />
 
-    <EditText
-        android:id="@+id/plainTextLagerortView"
-        android:layout_width="278dp"
-        android:layout_height="47dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="@string/leerText"
-        android:textSize="24sp"
-        tools:layout_editor_absoluteX="117dp"
-        tools:layout_editor_absoluteY="469dp" />
+            <EditText
+                android:id="@+id/plainTextEanView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="@string/leerText"
+                android:textSize="24sp" />
 
-    <Spinner
-        android:id="@+id/spinnerMenueSpinner"
-        android:layout_width="138dp"
-        android:layout_height="41dp"
-        tools:layout_editor_absoluteX="-2dp"
-        tools:layout_editor_absoluteY="675dp" />
+            <TextView
+                android:id="@+id/textViewEanNichtGefundenView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/leerText" />
 
-    <Spinner
-        android:id="@+id/spinner7"
-        android:layout_width="138dp"
-        android:layout_height="41dp"
-        tools:layout_editor_absoluteX="274dp"
-        tools:layout_editor_absoluteY="675dp" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
-    <EditText
-        android:id="@+id/plainTextMengeView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="@string/leerText"
-        android:textSize="24sp"
-        tools:layout_editor_absoluteX="117dp"
-        tools:layout_editor_absoluteY="403dp" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/imageButtonTastatur"
-        android:layout_width="138dp"
-        android:layout_height="41dp"
-        tools:layout_editor_absoluteX="136dp"
-        tools:layout_editor_absoluteY="674dp"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textViewEanNichtGefundenView"
-        android:layout_width="381dp"
-        android:layout_height="31dp"
-        android:text="@string/leerText"
-        tools:layout_editor_absoluteX="17dp"
-        tools:layout_editor_absoluteY="175dp" />
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/textViewMenge"
+                android:textSize="24sp" />
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/textViewStamm"
-        tools:layout_editor_absoluteX="198dp"
-        tools:layout_editor_absoluteY="538dp" />
+            <EditText
+                android:id="@+id/plainTextMengeView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="@string/leerText"
+                android:textSize="24sp" />
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/textViewEingabe"
-        tools:layout_editor_absoluteX="282dp"
-        tools:layout_editor_absoluteY="538dp" />
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/textViewLagerort"
+                android:textSize="24sp" />
 
-    <TextView
-        android:id="@+id/textViewStammView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/textViewStammZahl"
-        tools:layout_editor_absoluteX="217dp"
-        tools:layout_editor_absoluteY="563dp" />
+            <EditText
+                android:id="@+id/plainTextLagerortView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="@string/leerText"
+                android:textSize="24sp" />
 
-    <TextView
-        android:id="@+id/textViewEingabeView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/textViewEingabeZahl"
-        tools:layout_editor_absoluteX="303dp"
-        tools:layout_editor_absoluteY="563dp" />
+            <Button
+                android:id="@+id/buttonSpeichernView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/buttonSpeichern"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/textViewStamm" />
+
+            <TextView
+                android:id="@+id/textViewStammView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/textViewStammZahl" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/textViewEingabe" />
+
+            <TextView
+                android:id="@+id/textViewEingabeView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/textViewEingabeZahl" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.7"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/imageButtonTastatur"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <Spinner
+                android:id="@+id/spinnerMenueSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <Spinner
+                android:id="@+id/spinner7"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
