@@ -67,15 +67,17 @@
 
             <TextView
                 android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:text="@string/textViewMenge"
                 android:textSize="24sp" />
 
             <EditText
                 android:id="@+id/plainTextMengeView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:text="@string/leerText"
@@ -83,15 +85,17 @@
 
             <TextView
                 android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:text="@string/textViewLagerort"
                 android:textSize="24sp" />
 
             <EditText
                 android:id="@+id/plainTextLagerortView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:text="@string/leerText"
@@ -99,33 +103,38 @@
 
             <Button
                 android:id="@+id/buttonSpeichernView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:text="@string/buttonSpeichern"
                 android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/textView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:text="@string/textViewStamm" />
 
             <TextView
                 android:id="@+id/textViewStammView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:text="@string/textViewStammZahl" />
 
             <TextView
                 android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:text="@string/textViewEingabe" />
 
             <TextView
                 android:id="@+id/textViewEingabeView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:text="@string/textViewEingabeZahl" />
 
         </LinearLayout>
