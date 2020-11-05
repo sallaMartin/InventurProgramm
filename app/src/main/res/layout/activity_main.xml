@@ -234,20 +234,20 @@
                 android:orientation="horizontal">
 
                 <Spinner
-                    android:id="@+id/spinner7"
+                    android:id="@+id/spinnerMenueView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
-                <ImageButton
-                    android:id="@+id/imageButtonTastatur"
+                <Button
+                    android:id="@+id/buttonTastaturView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@android:drawable/alert_light_frame" />
+                    android:text="Button" />
 
                 <Spinner
-                    android:id="@+id/spinnerMenueSpinner"
+                    android:id="@+id/spinnerDatenView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
