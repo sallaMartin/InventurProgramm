@@ -9,7 +9,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -30,6 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:gravity="bottom|left"
                 android:text="@string/textViewEan"
                 android:textSize="24sp" />
 
@@ -63,7 +66,10 @@
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
+                android:layout_weight="4"
+                android:gravity="bottom|left"
+                android:paddingRight="10dp"
+                android:paddingBottom="5dp"
                 android:text="@string/textViewMenge"
                 android:textSize="18sp" />
 
@@ -71,8 +77,9 @@
                 android:id="@+id/plainTextMengeView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:ems="10"
+                android:gravity="center_vertical"
                 android:inputType="textPersonName"
                 android:text="@string/leerText"
                 android:textSize="18sp" />
@@ -88,7 +95,10 @@
                 android:id="@+id/textView3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
+                android:layout_weight="4"
+                android:gravity="bottom|left"
+                android:paddingRight="10dp"
+                android:paddingBottom="5dp"
                 android:text="@string/textViewLagerort"
                 android:textSize="18sp" />
 
@@ -96,8 +106,9 @@
                 android:id="@+id/plainTextLagerortView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:ems="10"
+                android:gravity="bottom"
                 android:inputType="textPersonName"
                 android:text="@string/leerText"
                 android:textSize="18sp" />
@@ -156,6 +167,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1.5"
+                    android:gravity="center"
                     android:text="@string/textViewStamm"
                     android:textSize="14sp" />
 
@@ -164,6 +176,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:gravity="center_horizontal"
                     android:text="@string/textViewStammZahl" />
 
             </LinearLayout>
@@ -186,6 +199,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1.5"
+                    android:gravity="center"
                     android:text="@string/textViewEingabe" />
 
                 <TextView
@@ -193,6 +207,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:gravity="center_horizontal"
                     android:text="@string/textViewEingabeZahl" />
             </LinearLayout>
 
@@ -215,7 +230,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1.4"
+                android:layout_weight="2"
                 android:orientation="horizontal">
 
                 <Spinner
