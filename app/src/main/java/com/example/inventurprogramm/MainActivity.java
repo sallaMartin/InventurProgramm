@@ -1,9 +1,13 @@
 package com.example.inventurprogramm;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,11 +34,6 @@ public class MainActivity extends AppCompatActivity {
     TextView textViewStamm;
     TextView textViewEingabe;
 
-    Spinner spinnerMenue;
-    Button buttonTastatur;
-    Spinner spinnerDaten;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,40 +49,50 @@ public class MainActivity extends AppCompatActivity {
         textViewStamm = (TextView) findViewById(R.id.textViewStammView);
         textViewEingabe = (TextView) findViewById(R.id.textViewEingabeView);
 
-        spinnerMenue = (Spinner) findViewById(R.id.spinnerMenueView);
-        buttonTastatur = (Button) findViewById(R.id.buttonTastaturView);
-        spinnerDaten = (Spinner) findViewById(R.id.spinnerDatenView);
-
-        fillSpinners();
 
         buttonSpeichern.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getBaseContext(), MainActivity2.class);
+                Intent intent = new Intent(getBaseContext(), uebersichtActivity.class);
                 startActivity(intent);
             }
         });
+
+
     }
 
 
-    public void fillSpinners() {
-        ArrayList <String> spinnerMenueItems = new ArrayList<>();
-        ArrayList <String> spinnerDatenItems = new ArrayList<>();
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.subitemInfo:
+                return true;
+            case R.id.subitemBeenden:
+                finish();
+                System.exit(0);
+                return true;
+            case R.id.subitemDatenEinlesen:
+                //Code
+                return true;
+            case R.id.subitemDatenAusgeben:
+                //Code
+                return true;
+            case R.id.subitemPfadeAendern:
+                //Code
+                return true;
+            case R.id.subitemUebersicht:
+                Intent intentActivity = new Intent(getBaseContext(), uebersichtActivity.class);
+                startActivity(intentActivity);
+                return true;
 
-        spinnerMenueItems.add("Information");
-        spinnerMenueItems.add("Beenden");
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-        spinnerDatenItems.add("Daten einlesen");
-        spinnerDatenItems.add("Daten ausgeben");
-        spinnerDatenItems.add("Pfade ändern");
-        spinnerDatenItems.add("Übersicht");
-
-        ArrayAdapter<String> arrayAdapterMenue = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerMenueItems);
-        arrayAdapterMenue.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerMenue.setAdapter(arrayAdapterMenue);
-
-        ArrayAdapter<String> arrayAdapterDaten = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerDatenItems);
-        arrayAdapterDaten.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerDaten.setAdapter(arrayAdapterDaten);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu, menu);
+        return true;
     }
 }
