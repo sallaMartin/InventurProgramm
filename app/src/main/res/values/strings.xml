@@ -14,4 +14,13 @@
     <string name="textViewEingabe">Eingabe</string>
     <string name="textViewEingabeZahl">0</string>
 
+    <string name="buttonOk">OK</string>
+
+
+    <string name="labelZeiel1">Copyright 2020 by</string>
+    <string name="labelZeiel2">kiwi.it</string>
+    <string name="labelZeiel3">Günter Rienzner</string>
+    <string name="labelZeiel4">office@mykiwi.at</string>
+    <string name="labelZeiel5">Nummer...</string>
+
 </resources>

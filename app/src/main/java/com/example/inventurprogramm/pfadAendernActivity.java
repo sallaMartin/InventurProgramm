@@ -4,11 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class pfadAendernAcitivity extends AppCompatActivity {
+public class pfadAendernActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pfad_aendern_acitivity);
+        setContentView(R.layout.activity_pfad_aendern);
     }
 }

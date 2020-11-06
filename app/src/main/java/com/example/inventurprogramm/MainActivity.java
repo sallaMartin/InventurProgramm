@@ -53,8 +53,7 @@ public class MainActivity extends AppCompatActivity {
         buttonSpeichern.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getBaseContext(), uebersichtActivity.class);
-                startActivity(intent);
+
             }
         });
 
@@ -66,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.subitemInfo:
+                Intent intentPopAcivity = new Intent(getApplicationContext(), PopActivity.class);
+                startActivity(intentPopAcivity);
                 return true;
             case R.id.subitemBeenden:
                 finish();
