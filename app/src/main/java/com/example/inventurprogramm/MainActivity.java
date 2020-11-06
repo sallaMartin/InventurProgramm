@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,6 +54,19 @@ public class MainActivity extends AppCompatActivity {
         buttonTastatur = (Button) findViewById(R.id.buttonTastaturView);
         spinnerDaten = (Spinner) findViewById(R.id.spinnerDatenView);
 
+        fillSpinners();
+
+        buttonSpeichern.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), MainActivity2.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+
+    public void fillSpinners() {
         ArrayList <String> spinnerMenueItems = new ArrayList<>();
         ArrayList <String> spinnerDatenItems = new ArrayList<>();
 
@@ -70,15 +85,5 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> arrayAdapterDaten = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerDatenItems);
         arrayAdapterDaten.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerDaten.setAdapter(arrayAdapterDaten);
-
-
-        buttonSpeichern.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getBaseContext(), MainActivity2.class);
-                startActivity(intent);
-            }
-        });
-
     }
 }
