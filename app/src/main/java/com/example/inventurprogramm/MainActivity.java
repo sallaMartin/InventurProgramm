@@ -1,8 +1,10 @@
 package com.example.inventurprogramm;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -65,8 +68,18 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.subitemInfo:
-                //Intent intentPopAcivity = new Intent(getApplicationContext(), PopActivity.class);
-                //startActivity(intentPopAcivity);
+                String text = "Text1/nText2/ntext3";
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Information");
+                builder.setIcon(android.R.drawable.ic_dialog_info);
+                builder.setMessage("Copyright 2020 by\n" + "kiwi.it\n" + "Günter Rienzner\n" + "office@mykiwi.at\n" + "Nummer...");
+                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                builder.show();
+                builder.create();
                 return true;
             case R.id.subitemBeenden:
                 finish();
@@ -79,11 +92,12 @@ public class MainActivity extends AppCompatActivity {
                 //Code
                 return true;
             case R.id.subitemPfadeAendern:
-                //Code
+                Intent intentpfadAendernAcitivity = new Intent(getBaseContext(), pfadAendernActivity.class);
+                startActivity(intentpfadAendernAcitivity);
                 return true;
             case R.id.subitemUebersicht:
-                Intent intentActivity = new Intent(getBaseContext(), uebersichtActivity.class);
-                startActivity(intentActivity);
+                Intent intentUebersichtActivity = new Intent(getBaseContext(), uebersichtActivity.class);
+                startActivity(intentUebersichtActivity);
                 return true;
 
         }
