@@ -65,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.subitemInfo:
-                Intent intentPopAcivity = new Intent(getApplicationContext(), PopActivity.class);
-                startActivity(intentPopAcivity);
+                //Intent intentPopAcivity = new Intent(getApplicationContext(), PopActivity.class);
+                //startActivity(intentPopAcivity);
                 return true;
             case R.id.subitemBeenden:
                 finish();

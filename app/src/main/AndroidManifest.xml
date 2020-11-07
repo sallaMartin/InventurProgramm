@@ -10,11 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".pfadAendernActivity"></activity>
-        <activity
-            android:name=".PopActivity"
-            android:theme="@style/AppTheme.PopMe"
-
-            />
         <activity android:name=".uebersichtActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
