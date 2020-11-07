@@ -5,15 +5,15 @@
     <item
         android:id="@+id/menuBarMenue"
         android:icon="@drawable/ic_baseline_menu_24"
-        android:title="Menü"
+        android:title="@string/menuTitle"
         app:showAsAction="ifRoom" >
         <menu>
             <item
                 android:id="@+id/subitemInfo"
-                android:title="Information" />
+                android:title="@string/menuItemInfo" />
             <item
                 android:id="@+id/subitemBeenden"
-                android:title="Beenden" />
+                android:title="@string/menuItemEnd" />
         </menu>
     </item>
 
@@ -21,21 +21,21 @@
     <item
         android:id="@+id/menuBarFolder"
         android:icon="@drawable/ic_baseline_folder_24"
-        android:title="Daten"
+        android:title="@string/menuData"
         app:showAsAction="ifRoom" >
         <menu>
             <item
                 android:id="@+id/subitemDatenEinlesen"
-                android:title="Daten einlesen" />
+                android:title="@string/menuItemReadData" />
             <item
                 android:id="@+id/subitemDatenAusgeben"
-                android:title="Daten ausgeben" />
+                android:title="@string/menuItemWriteData" />
             <item
                 android:id="@+id/subitemPfadeAendern"
-                android:title="Pfade ändern" />
+                android:title="@string/menuItemPfadAendern" />
             <item
                 android:id="@+id/subitemUebersicht"
-                android:title="Übersicht" />
+                android:title="@string/menuItemUebersicht" />
         </menu>
     </item>
 </menu>
