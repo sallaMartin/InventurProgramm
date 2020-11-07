@@ -32,6 +32,23 @@
     <string name="menuItemPfadAendern">Pfade ändern</string>
     <string name="menuItemUebersicht">Übersicht</string>
 
+    <string name="labelEingabe">Eingabe</string>
+    <string name="labelLesepfad">Lesepfad</string>
+    <string name="plainTextPfad"></string>
+
+    <string name="labelAusgabe">Ausgabe</string>
+    <string name="labelSpeicherpfad">Speicherpfad</string>
+    <string name="plainTextSpeicherpfad"></string>
+    <string name="labelGeraetename">Gerätename</string>
+    <string name="plainTextGeraetename"></string>
+    <string name="buttonEinstellungenZuruecksetzen">Einstellungen Zurücksetzen</string>
+
+
+
+
+
+
+
 
 
 
