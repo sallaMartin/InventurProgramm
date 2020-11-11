@@ -14,4 +14,43 @@
     <string name="textViewEingabe">Eingabe</string>
     <string name="textViewEingabeZahl">0</string>
 
+    <string name="buttonOk">OK</string>
+
+    <string name="labelZeiel1">Copyright 2020 by</string>
+    <string name="labelZeiel2">kiwi.it</string>
+    <string name="labelZeiel3">Günter Rienzner</string>
+    <string name="labelZeiel4">office@mykiwi.at</string>
+    <string name="labelZeiel5">Nummer...</string>
+
+    <string name="menuTitle">Menü</string>
+    <string name="menuItemInfo">Information</string>
+    <string name="menuItemEnd">Beenden</string>
+
+    <string name="menuData">Daten</string>
+    <string name="menuItemReadData">Daten einlesen</string>
+    <string name="menuItemWriteData">Daten ausgeben</string>
+    <string name="menuItemPfadAendern">Pfade ändern</string>
+    <string name="menuItemUebersicht">Übersicht</string>
+
+    <string name="labelEingabe">Eingabe</string>
+    <string name="labelLesepfad">Lesepfad</string>
+    <string name="plainTextPfad"></string>
+
+    <string name="labelAusgabe">Ausgabe</string>
+    <string name="labelSpeicherpfad">Speicherpfad</string>
+    <string name="plainTextSpeicherpfad"></string>
+    <string name="labelGeraetename">Gerätename</string>
+    <string name="plainTextGeraetename"></string>
+    <string name="buttonEinstellungenZuruecksetzen">Einstellungen Zurücksetzen</string>
+
+
+
+
+
+
+
+
+
+
+
 </resources>
