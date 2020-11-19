@@ -20,9 +20,11 @@ public class uebersichtActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        //back Button
-        Intent intentMainActivity = new Intent(getBaseContext(), MainActivity.class);
-        startActivity(intentMainActivity);
-        return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
