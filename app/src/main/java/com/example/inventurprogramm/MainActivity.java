@@ -24,6 +24,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -88,7 +93,24 @@ public class MainActivity extends AppCompatActivity {
                 System.exit(0);
                 return true;
             case R.id.subitemDatenEinlesen:
-                //Code
+                String filename = "pfade.txt";
+                String pfadEinlesen;
+                try {
+                    FileInputStream fis = openFileInput(filename);
+                    BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+                    String line;
+                    while ((line=br.readLine())!= null) {
+                        String[] s = line.split(";");
+                        pfadEinlesen = s[0];
+                    }
+                    br.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                //FileReader von Jeremias....
                 return true;
             case R.id.subitemDatenAusgeben:
                 //Code
