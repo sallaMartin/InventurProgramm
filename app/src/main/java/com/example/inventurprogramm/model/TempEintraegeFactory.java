@@ -2,6 +2,9 @@ package com.example.inventurprogramm.model;
 
 import com.example.inventurprogramm.model.Eintrag;
 
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 
 public class TempEintraegeFactory {
