@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,11 +23,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
 
     EditText plainTextEan;
     TextView textViewEanNichtGefunden;
@@ -60,9 +62,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        //Test fuer vergleichEAN
+        vergleichEAN();
     }
-
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -110,4 +112,31 @@ public class MainActivity extends AppCompatActivity {
         menuInflater.inflate(R.menu.menu, menu);
         return true;
     }
+
+    public void vergleichEAN(){
+        plainTextEan.addTextChangedListener(new TextWatcher() {
+            String ean;
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if (s.length() > 7 && s.length() < 14){
+                   ean =  plainTextEan.getText().toString();
+                    Toast.makeText(MainActivity.this, ean+ " ", Toast.LENGTH_SHORT).show();
+
+                }
+                //Für Testen der Ausgabe
+                plainTextMenge.setText(ean);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
 }
