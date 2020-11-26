@@ -23,9 +23,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.inventurprogramm.model.Eintrag;
+import com.example.inventurprogramm.model.TempEintraegeFactory;
+
 import java.io.BufferedReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     Button buttonSpeichern;
     TextView textViewStamm;
     TextView textViewEingabe;
+
+    List<Eintrag> arry = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,13 +130,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+                TempEintraegeFactory tempEintraegeFactory = new TempEintraegeFactory();
+               arry = tempEintraegeFactory.getFilledList();
+
                 if (s.length() > 7 && s.length() < 14){
                    ean =  plainTextEan.getText().toString();
-                    Toast.makeText(MainActivity.this, ean+ " ", Toast.LENGTH_SHORT).show();
+                   //Toast.makeText(MainActivity.this, ean+ " ", Toast.LENGTH_SHORT).show();
+                    Eintrag e = new Eintrag(ean);
+                    for(int i = 1; i < arry.size() ; i++){
+                     if(arry.get(i).getEan().contains(ean)) {
+                         textViewEanNichtGefunden.setText("Der EAN wurde gefunden");
+                         plainTextMenge.setText(arry.get(i).getMenge());
+                         plainTextLagerort.setText(arry.get(i).getLagerort());
+                     }
+                    }
 
                 }
-                //Für Testen der Ausgabe
-                plainTextMenge.setText(ean);
+
             }
 
             @Override

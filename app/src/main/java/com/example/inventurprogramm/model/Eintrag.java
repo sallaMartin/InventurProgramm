@@ -25,6 +25,10 @@ public class Eintrag {
 
     }
 
+    public Eintrag(String ean) {
+        this.ean = ean;
+    }
+
     public String getEan() {
         return ean;
     }
