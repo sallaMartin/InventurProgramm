@@ -12,16 +12,10 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.inventurprogramm.model.Eintrag;
 import com.example.inventurprogramm.model.TempEintraegeFactory;
@@ -66,17 +60,27 @@ public class MainActivity extends AppCompatActivity {
         textViewStamm = (TextView) findViewById(R.id.textViewStammView);
         textViewEingabe = (TextView) findViewById(R.id.textViewEingabeView);
 
+        TempEintraegeFactory.getFilledList();
 
         buttonSpeichern.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                saveNewEintrag();
             }
         });
 
-        //Methoden aufruf fuer vergleichEAN
-        vergleichEAN();
     }
+
+
+    private void saveNewEintrag() {
+        Eintrag e = new Eintrag(plainTextEan.getText().toString(), "TestEintrag" + TempEintraegeFactory.eintraege.size(), plainTextMenge.getText().toString(), plainTextLagerort.getText().toString(), "" + TempEintraegeFactory.eintraege.size() );
+        TempEintraegeFactory.eintraege.add(e);
+
+        plainTextEan.setText("");
+        plainTextLagerort.setText("");
+        plainTextMenge.setText("");
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -138,11 +142,11 @@ public class MainActivity extends AppCompatActivity {
                 //Code
                 return true;
             case R.id.subitemPfadeAendern:
-                Intent intentpfadAendernAcitivity = new Intent(getBaseContext(), pfadAendernActivity.class);
+                Intent intentpfadAendernAcitivity = new Intent(getBaseContext(), ChangePathActivity.class);
                 startActivity(intentpfadAendernAcitivity);
                 return true;
             case R.id.subitemUebersicht:
-                Intent intentUebersichtActivity = new Intent(getBaseContext(), uebersichtActivity.class);
+                Intent intentUebersichtActivity = new Intent(getBaseContext(), OverviewActivity.class);
                 startActivity(intentUebersichtActivity);
                 return true;
 

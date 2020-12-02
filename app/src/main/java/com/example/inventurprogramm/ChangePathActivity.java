@@ -3,7 +3,6 @@ package com.example.inventurprogramm;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +14,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
-public class pfadAendernActivity extends AppCompatActivity {
+public class ChangePathActivity extends AppCompatActivity {
 
 
     EditText plainTextLesepfad;
@@ -25,7 +24,7 @@ public class pfadAendernActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pfad_aendern);
+        setContentView(R.layout.activity_change_path);
 
         plainTextLesepfad = (EditText) findViewById(R.id.editTextLesepfadView);
         plainTextSpeicherPfad = (EditText) findViewById(R.id.editTextSpeicherPfadView);
