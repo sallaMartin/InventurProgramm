@@ -27,6 +27,11 @@ import com.example.inventurprogramm.model.Eintrag;
 import com.example.inventurprogramm.model.TempEintraegeFactory;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -95,7 +100,39 @@ public class MainActivity extends AppCompatActivity {
                 System.exit(0);
                 return true;
             case R.id.subitemDatenEinlesen:
-                //Code
+                String filename = "pfade.txt";
+                String pfadEinlesen = "";
+                try {
+                    FileInputStream fis = openFileInput(filename);
+                    BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+                    String line;
+                    while ((line=br.readLine())!= null) {
+                        String[] s = line.split(";");
+                        pfadEinlesen = s[0];
+                    }
+                    br.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    FileInputStream fis = openFileInput(pfadEinlesen);
+                    BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+                    String line;
+                    while ((line=br.readLine()) != null) {
+                        String[] stammdatenArray = line.split(";");
+                        //Noch in Datenbank
+                        String speichernNoch = stammdatenArray[0];
+                    }
+                    br.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
                 return true;
             case R.id.subitemDatenAusgeben:
                 //Code
