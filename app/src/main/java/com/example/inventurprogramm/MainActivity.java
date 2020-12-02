@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Test fuer vergleichEAN
+        //Methoden aufruf fuer vergleichEAN
         vergleichEAN();
     }
 
@@ -139,6 +139,9 @@ public class MainActivity extends AppCompatActivity {
                     Eintrag e = new Eintrag(ean);
                     for(int i = 1; i < arry.size() ; i++){
                      if(arry.get(i).getEan().contains(ean)) {
+                         textViewEanNichtGefunden.setText(" ");
+                         plainTextLagerort.setText("");
+                         plainTextMenge.setText("");
                          textViewEanNichtGefunden.setText("Der EAN wurde gefunden");
                          plainTextMenge.setText(arry.get(i).getMenge());
                          plainTextLagerort.setText(arry.get(i).getLagerort());
