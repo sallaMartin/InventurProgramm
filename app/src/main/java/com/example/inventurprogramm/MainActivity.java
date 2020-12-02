@@ -133,26 +133,39 @@ public class MainActivity extends AppCompatActivity {
                 TempEintraegeFactory tempEintraegeFactory = new TempEintraegeFactory();
                arry = tempEintraegeFactory.getFilledList();
 
-                if (s.length() > 7 && s.length() < 14){
+                if(s.length() > 6 && s.length() < 13){
                    ean =  plainTextEan.getText().toString();
                    //Toast.makeText(MainActivity.this, ean+ " ", Toast.LENGTH_SHORT).show();
                     Eintrag e = new Eintrag(ean);
-                    for(int i = 1; i < arry.size() ; i++){
-                     if(arry.get(i).getEan().contains(ean)) {
-                         textViewEanNichtGefunden.setText(" ");
-                         plainTextLagerort.setText("");
-                         plainTextMenge.setText("");
-                         textViewEanNichtGefunden.setText("Der EAN wurde gefunden");
+                    boolean help;
+                    for(int i = 0; i < arry.size(); i++){
+                        help = arry.get(i).getEan().equals(ean);
+                     if(help) {
+                     //   if(e.getEan().equals(ean)){
+                        // Toast.makeText(MainActivity.this, "Der EAN wurde gefunden", Toast.LENGTH_LONG).show();
+                         textViewEanNichtGefunden.setText("Der EAN wurde Gefunden");
+
+                         //Wir zum testen benoetigt
                          plainTextMenge.setText(arry.get(i).getMenge());
                          plainTextLagerort.setText(arry.get(i).getLagerort());
+
+                     }else{
+                         textViewEanNichtGefunden.setText("");
+                         textViewEanNichtGefunden.setText("Der EAN wurde NICHT Gefunden");
+                        // Toast.makeText(MainActivity.this, "Der EAN wurde NICHT Gefunden", Toast.LENGTH_SHORT).show();
                      }
+
+
                     }
 
+
                 }else{
-                    textViewEanNichtGefunden.setText("Ean hat nicht die richtige Länge");
+                    //Toast.makeText(MainActivity.this, "Ean hat nicht die richtige Länge", Toast.LENGTH_SHORT).show();
+                   textViewEanNichtGefunden.setText("Ean hat nicht die richtige Länge");
                     plainTextLagerort.setText("");
                     plainTextMenge.setText("");
                 }
+
 
 
             }
