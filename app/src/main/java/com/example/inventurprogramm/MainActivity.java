@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.subitemDatenEinlesen:
                 String filename = "pfade.txt";
-                String pfadEinlesen;
+                String pfadEinlesen = "";
                 try {
                     FileInputStream fis = openFileInput(filename);
                     BufferedReader br = new BufferedReader(new InputStreamReader(fis));
@@ -109,8 +109,23 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                try {
+                    FileInputStream fis = openFileInput(pfadEinlesen);
+                    BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+                    String line;
+                    while ((line=br.readLine()) != null) {
+                        String[] stammdatenArray = line.split(";");
+                        //Noch in Datenbank
+                        String speichernNoch = stammdatenArray[0];
+                    }
+                    br.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                //FileReader von Jeremias....
+
                 return true;
             case R.id.subitemDatenAusgeben:
                 //Code
