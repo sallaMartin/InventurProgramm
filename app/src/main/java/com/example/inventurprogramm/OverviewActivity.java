@@ -49,6 +49,7 @@ public class OverviewActivity extends AppCompatActivity {
 
         TextView label_bezeichnung = new TextView(this);
         label_bezeichnung.setId((Integer) 20);
+        label_bezeichnung.setTextSize(15);
         label_bezeichnung.setText("Bezeichnung");
         label_bezeichnung.setTextColor(Color.WHITE);
         label_bezeichnung.setPadding(10, 5, 10, 5);
@@ -56,6 +57,7 @@ public class OverviewActivity extends AppCompatActivity {
 
         TextView label_menge = new TextView(this);
         label_menge.setId((Integer) 21);
+        label_menge.setTextSize(15);
         label_menge.setText("Menge");
         label_menge.setTextColor(Color.WHITE);
         label_menge.setPadding(5, 5, 5, 5);
@@ -63,6 +65,7 @@ public class OverviewActivity extends AppCompatActivity {
 
         TextView label_lagerort = new TextView(this);
         label_lagerort.setId((Integer) 21);
+        label_lagerort.setTextSize(15);
         label_lagerort.setText("Lagerort");
         label_lagerort.setTextColor(Color.WHITE);
         label_lagerort.setPadding(5, 5, 5, 5);
@@ -70,6 +73,7 @@ public class OverviewActivity extends AppCompatActivity {
 
         TextView label_ean = new TextView(this);
         label_ean.setId((Integer) 21);
+        label_ean.setTextSize(15);
         label_ean.setText("EAN");
         label_ean.setTextColor(Color.WHITE);
         label_ean.setPadding(5, 5, 5, 5);
@@ -106,7 +110,7 @@ public class OverviewActivity extends AppCompatActivity {
     private TextView generateTableCell(String text){
         TextView t_label = new TextView(this);
         t_label.setText(text);
-        t_label.setTextSize(13);
+        t_label.setTextSize(15);
         t_label.setTextColor(Color.BLACK);
         t_label.setBackgroundColor(Color.WHITE);
         t_label.setBackground(this.getResources().getDrawable(R.drawable.border));

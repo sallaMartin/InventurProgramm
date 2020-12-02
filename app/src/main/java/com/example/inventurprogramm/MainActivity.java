@@ -81,9 +81,6 @@ public class MainActivity extends AppCompatActivity {
         plainTextMenge.setText("");
     }
 
-        //Methoden aufruf fuer vergleichEAN
-        vergleichEAN();
-    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
