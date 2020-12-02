@@ -10,19 +10,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -92,11 +83,11 @@ public class MainActivity extends AppCompatActivity {
                 //Code
                 return true;
             case R.id.subitemPfadeAendern:
-                Intent intentpfadAendernAcitivity = new Intent(getBaseContext(), pfadAendernActivity.class);
+                Intent intentpfadAendernAcitivity = new Intent(getBaseContext(), ChangePathActivity.class);
                 startActivity(intentpfadAendernAcitivity);
                 return true;
             case R.id.subitemUebersicht:
-                Intent intentUebersichtActivity = new Intent(getBaseContext(), uebersichtActivity.class);
+                Intent intentUebersichtActivity = new Intent(getBaseContext(), OverviewActivity.class);
                 startActivity(intentUebersichtActivity);
                 return true;
 
