@@ -175,13 +175,16 @@ public class MainActivity extends AppCompatActivity {
                    //Toast.makeText(MainActivity.this, ean+ " ", Toast.LENGTH_SHORT).show();
                     Eintrag e = new Eintrag(ean);
                     for(int i = 1; i < arry.size() ; i++){
-                     if(arry.get(i).getEan().contains(ean)) {
+                     if(arry.get(i).getEan().equals(ean)) {
                          textViewEanNichtGefunden.setText(" ");
                          plainTextLagerort.setText("");
                          plainTextMenge.setText("");
                          textViewEanNichtGefunden.setText("Der EAN wurde gefunden");
                          plainTextMenge.setText(arry.get(i).getMenge());
                          plainTextLagerort.setText(arry.get(i).getLagerort());
+                     } else
+                     {
+                         textViewEanNichtGefunden.setText("kdsfj");
                      }
                     }
 
