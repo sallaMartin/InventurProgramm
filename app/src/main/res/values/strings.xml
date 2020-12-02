@@ -14,6 +14,7 @@
     <string name="textViewEingabe">Eingabe</string>
     <string name="textViewEingabeZahl">0</string>
 
+
     <string name="buttonOk">OK</string>
 
     <string name="labelZeiel1">Copyright 2020 by</string>
@@ -37,6 +38,7 @@
     <string name="plainTextPfad"></string>
 
     <string name="labelAusgabe">Ausgabe</string>
+    <string name="labelSuche">Suche:</string>
     <string name="labelSpeicherpfad">Speicherpfad</string>
     <string name="plainTextSpeicherpfad"></string>
     <string name="labelGeraetename">Gerätename</string>
