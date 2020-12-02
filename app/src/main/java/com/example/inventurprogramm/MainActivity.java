@@ -15,8 +15,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import com.example.inventurprogramm.model.Eintrag;
+import com.example.inventurprogramm.model.TempEintraegeFactory;
 
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity {
 
     EditText plainTextEan;
     TextView textViewEanNichtGefunden;
@@ -43,17 +47,26 @@ public class MainActivity extends AppCompatActivity {
         textViewStamm = (TextView) findViewById(R.id.textViewStammView);
         textViewEingabe = (TextView) findViewById(R.id.textViewEingabeView);
 
+        TempEintraegeFactory.getFilledList();
 
         buttonSpeichern.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                saveNewEintrag();
             }
         });
 
-
     }
 
+
+    private void saveNewEintrag() {
+        Eintrag e = new Eintrag(plainTextEan.getText().toString(), "TestEintrag" + TempEintraegeFactory.eintraege.size(), plainTextMenge.getText().toString(), plainTextLagerort.getText().toString(), "" + TempEintraegeFactory.eintraege.size() );
+        TempEintraegeFactory.eintraege.add(e);
+
+        plainTextEan.setText("");
+        plainTextLagerort.setText("");
+        plainTextMenge.setText("");
+    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
