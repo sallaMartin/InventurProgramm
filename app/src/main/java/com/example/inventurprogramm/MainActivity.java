@@ -148,7 +148,12 @@ public class MainActivity extends AppCompatActivity {
                      }
                     }
 
+                }else{
+                    textViewEanNichtGefunden.setText("Ean hat nicht die richtige Länge");
+                    plainTextLagerort.setText("");
+                    plainTextMenge.setText("");
                 }
+
 
             }
 
