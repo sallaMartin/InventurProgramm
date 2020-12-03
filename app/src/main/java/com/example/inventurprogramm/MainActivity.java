@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         textViewEingabe = (TextView) findViewById(R.id.textViewEingabeView);
 
         TempEintraegeFactory.getFilledList();
+        vergleichEAN();
 
         buttonSpeichern.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                          plainTextLagerort.setText(arry.get(i).getLagerort());
                      } else
                      {
-                         textViewEanNichtGefunden.setText("kdsfj");
+                         textViewEanNichtGefunden.setText("Der EAN wurde nicht gefunden");
                      }
                     }
 
