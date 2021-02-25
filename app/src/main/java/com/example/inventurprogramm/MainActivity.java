@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 saveNewEintrag();
 
                 try {
-                    DB snappyDB =  DBFactory.open("path");//TODO pfad eingeben
+                    DB snappyDB =  DBFactory.open("/data/data/com.example.inventurprogramm/databases/DatabaseTest");//TODO pfad eingeben
                     //Schreibt Daten mittels EAN in die Datenbank
                     snappyDB.put(ean, new Eintrag(ean,plainTextMenge.getText().toString(),plainTextLagerort.getText().toString()));
 
@@ -202,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
                          textViewEanNichtGefunden.setText("Der EAN wurde gefunden");
                          plainTextMenge.setText(arry.get(i).getMenge());
                          plainTextLagerort.setText(arry.get(i).getLagerort());
+                         break;
                      } else
                      {
                          textViewEanNichtGefunden.setText("Der EAN wurde nicht gefunden");
