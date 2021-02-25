@@ -19,6 +19,10 @@ import android.widget.TextView;
 
 import com.example.inventurprogramm.model.Eintrag;
 import com.example.inventurprogramm.model.TempEintraegeFactory;
+import com.snappydb.DB;
+import com.snappydb.DBFactory;
+import com.snappydb.SnappyDB;
+import com.snappydb.SnappydbException;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -44,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     TextView textViewEingabe;
 
     List<Eintrag> arry = new ArrayList<>();
+    String ean;
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +73,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 saveNewEintrag();
+
+                try {
+                    DB snappyDB =  DBFactory.open("/data/data/com.example.inventurprogramm/databases/DatabaseTest");//TODO pfad eingeben
+                    //Schreibt Daten mittels EAN in die Datenbank
+                    snappyDB.put(ean, new Eintrag(ean,plainTextMenge.getText().toString(),plainTextLagerort.getText().toString()));
+
+                } catch (SnappydbException snappydbException) {
+                    snappydbException.printStackTrace();
+                }
             }
         });
 
@@ -164,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void vergleichEAN(){
         plainTextEan.addTextChangedListener(new TextWatcher() {
-            String ean;
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -188,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
                          textViewEanNichtGefunden.setText("Der EAN wurde gefunden");
                          plainTextMenge.setText(arry.get(i).getMenge());
                          plainTextLagerort.setText(arry.get(i).getLagerort());
+                         break;
                      } else
                      {
                          textViewEanNichtGefunden.setText("Der EAN wurde nicht gefunden");
@@ -234,5 +250,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+
+
 
 }
