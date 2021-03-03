@@ -68,4 +68,15 @@ public class Eintrag {
     public void setId(String id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Eintrag{" +
+                "ean='" + ean + '\'' +
+                ", bezeichnung='" + bezeichnung + '\'' +
+                ", menge='" + menge + '\'' +
+                ", lagerort='" + lagerort + '\'' +
+                ", id='" + id + '\'' +
+                '}';
+    }
 }

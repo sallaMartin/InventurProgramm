@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ActionBar;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -16,6 +17,9 @@ import android.widget.TextView;
 
 import com.example.inventurprogramm.model.Eintrag;
 import com.example.inventurprogramm.model.TempEintraegeFactory;
+import com.snappydb.DB;
+import com.snappydb.DBFactory;
+import com.snappydb.SnappydbException;
 
 import java.util.ArrayList;
 
@@ -26,7 +30,16 @@ public class OverviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_overview);
         setTitle(R.string.menuItemUebersicht);
 
+        try {
+            DB snappyDB =  DBFactory.open("/data/data/com.example.inventurprogramm/databases/DatabaseTest");//TODO pfad eingeben
 
+            Eintrag e = snappyDB.getObject("1111111111", Eintrag.class);
+            Log.i("test", "" + e.getLagerort() + e.toString());
+
+
+        } catch (SnappydbException snappydbException) {
+            snappydbException.printStackTrace();
+        }
 
         //make table
         makeTable();
