@@ -33,6 +33,7 @@ public class ChangePathActivity extends AppCompatActivity {
         buttonSpeichern = (Button) findViewById(R.id.buttonSpeichernPfad);
         buttonEinstellungenZuruecksetzen = (Button) findViewById(R.id.buttonEinstellungenZurzecksetzenView);
 
+
         buttonSpeichern.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
