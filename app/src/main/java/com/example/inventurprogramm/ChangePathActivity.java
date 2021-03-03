@@ -1,8 +1,10 @@
 package com.example.inventurprogramm;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +23,22 @@ public class ChangePathActivity extends AppCompatActivity {
     EditText plainTextSpeicherPfad;
     EditText plainTextGeraetename;
     Button buttonSpeichern, buttonEinstellungenZuruecksetzen;
+    Intent myFileIntent;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 10:
+                if (resultCode == RESULT_OK) {
+                    String path = data.getData().getPath(); //pfad!
+                    plainTextLesepfad.setText(path);
+                }
+
+                break;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +50,18 @@ public class ChangePathActivity extends AppCompatActivity {
 
         buttonSpeichern = (Button) findViewById(R.id.buttonSpeichernPfad);
         buttonEinstellungenZuruecksetzen = (Button) findViewById(R.id.buttonEinstellungenZurzecksetzenView);
+
+        plainTextLesepfad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                myFileIntent.setType("*/*");
+                startActivityForResult(myFileIntent, 10);
+
+            }
+        });
+
+
 
         buttonSpeichern.setOnClickListener(new View.OnClickListener() {
             @Override
