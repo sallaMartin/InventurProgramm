@@ -82,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
                 } catch (SnappydbException snappydbException) {
                     snappydbException.printStackTrace();
                 }
+
+                plainTextEan.setText("");
+                plainTextLagerort.setText("");
+                plainTextMenge.setText("");
             }
         });
 
@@ -92,9 +96,7 @@ public class MainActivity extends AppCompatActivity {
         Eintrag e = new Eintrag(plainTextEan.getText().toString(), "TestEintrag" + TempEintraegeFactory.eintraege.size(), plainTextMenge.getText().toString(), plainTextLagerort.getText().toString(), "" + TempEintraegeFactory.eintraege.size() );
         TempEintraegeFactory.eintraege.add(e);
 
-        plainTextEan.setText("");
-        plainTextLagerort.setText("");
-        plainTextMenge.setText("");
+
     }
 
 
