@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
                    ean =  plainTextEan.getText().toString();
                    //Toast.makeText(MainActivity.this, ean+ " ", Toast.LENGTH_SHORT).show();
                     Eintrag e = new Eintrag(ean);
-<<<<<<< HEAD
+
                     for(int i = 1; i < arry.size() ; i++){
                      if(arry.get(i).getEan().equals(ean)) {
                          textViewEanNichtGefunden.setText(" ");
@@ -207,26 +207,6 @@ public class MainActivity extends AppCompatActivity {
                      } else
                      {
                          textViewEanNichtGefunden.setText("Der EAN wurde nicht gefunden");
-=======
-                    for(int i = 0; i < arry.size(); i++){
-
-                        ean =  plainTextEan.getText().toString();
-                     if(arry.get(i).getEan().equals(ean) == false) {
-
-                         textViewEanNichtGefunden.setText("Der EAN wurde NICHT Gefunden");
-
-                     }else if (arry.get(i).getEan().equals(ean) == true){
-
-                         // Toast.makeText(MainActivity.this, "Der EAN wurde gefunden", Toast.LENGTH_LONG).show();
-                         textViewEanNichtGefunden.setEnabled(true);
-                         textViewEanNichtGefunden.setText("Der EAN wurde GEFUNDEN");
-                         textViewEanNichtGefunden.requestLayout();
-
-                         //Wir zum testen benoetigt
-                         plainTextMenge.setText(arry.get(i).getMenge());
-                         plainTextLagerort.setText(arry.get(i).getLagerort());
-                         break;
->>>>>>> origin/featureVergleichEan
                      }
 
                  }
