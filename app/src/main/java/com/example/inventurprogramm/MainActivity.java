@@ -19,6 +19,10 @@ import android.widget.TextView;
 
 import com.example.inventurprogramm.model.Eintrag;
 import com.example.inventurprogramm.model.TempEintraegeFactory;
+import com.snappydb.DB;
+import com.snappydb.DBFactory;
+import com.snappydb.SnappyDB;
+import com.snappydb.SnappydbException;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -44,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     TextView textViewEingabe;
 
     List<Eintrag> arry = new ArrayList<>();
+    String ean;
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +73,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 saveNewEintrag();
+
+                try {
+                    DB snappyDB =  DBFactory.open("/data/data/com.example.inventurprogramm/databases/DatabaseTest");//TODO pfad eingeben
+                    //Schreibt Daten mittels EAN in die Datenbank
+                    snappyDB.put(ean, new Eintrag(ean,plainTextMenge.getText().toString(),plainTextLagerort.getText().toString()));
+
+                } catch (SnappydbException snappydbException) {
+                    snappydbException.printStackTrace();
+                }
             }
         });
 
@@ -164,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void vergleichEAN(){
         plainTextEan.addTextChangedListener(new TextWatcher() {
-            String ean;
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -175,10 +190,11 @@ public class MainActivity extends AppCompatActivity {
                 TempEintraegeFactory tempEintraegeFactory = new TempEintraegeFactory();
                arry = tempEintraegeFactory.getFilledList();
 
-                if (s.length() > 7 && s.length() < 14){
+                if(s.length() > 7 && s.length() < 14){
                    ean =  plainTextEan.getText().toString();
                    //Toast.makeText(MainActivity.this, ean+ " ", Toast.LENGTH_SHORT).show();
                     Eintrag e = new Eintrag(ean);
+<<<<<<< HEAD
                     for(int i = 1; i < arry.size() ; i++){
                      if(arry.get(i).getEan().equals(ean)) {
                          textViewEanNichtGefunden.setText(" ");
@@ -187,17 +203,43 @@ public class MainActivity extends AppCompatActivity {
                          textViewEanNichtGefunden.setText("Der EAN wurde gefunden");
                          plainTextMenge.setText(arry.get(i).getMenge());
                          plainTextLagerort.setText(arry.get(i).getLagerort());
+                         break;
                      } else
                      {
                          textViewEanNichtGefunden.setText("Der EAN wurde nicht gefunden");
+=======
+                    for(int i = 0; i < arry.size(); i++){
+
+                        ean =  plainTextEan.getText().toString();
+                     if(arry.get(i).getEan().equals(ean) == false) {
+
+                         textViewEanNichtGefunden.setText("Der EAN wurde NICHT Gefunden");
+
+                     }else if (arry.get(i).getEan().equals(ean) == true){
+
+                         // Toast.makeText(MainActivity.this, "Der EAN wurde gefunden", Toast.LENGTH_LONG).show();
+                         textViewEanNichtGefunden.setEnabled(true);
+                         textViewEanNichtGefunden.setText("Der EAN wurde GEFUNDEN");
+                         textViewEanNichtGefunden.requestLayout();
+
+                         //Wir zum testen benoetigt
+                         plainTextMenge.setText(arry.get(i).getMenge());
+                         plainTextLagerort.setText(arry.get(i).getLagerort());
+                         break;
+>>>>>>> origin/featureVergleichEan
                      }
-                    }
+
+                 }
+
 
                 }else{
+                    //Toast.makeText(MainActivity.this, "Ean hat nicht die richtige Länge", Toast.LENGTH_SHORT).show();
+                  //  textViewEanNichtGefunden.setText("");
                     textViewEanNichtGefunden.setText("Ean hat nicht die richtige Länge");
                     plainTextLagerort.setText("");
                     plainTextMenge.setText("");
                 }
+
 
 
             }
@@ -208,5 +250,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+
+
 
 }
