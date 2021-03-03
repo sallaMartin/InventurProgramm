@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                     FileInputStream fis = openFileInput(filename);
                     BufferedReader br = new BufferedReader(new InputStreamReader(fis));
                     String line;
-                    while ((line=br.readLine())!= null) {
+                    while ((line = br.readLine()) != null) {
                         String[] s = line.split(";");
                         pfadEinlesen = s[0];
                     }
@@ -140,15 +140,17 @@ public class MainActivity extends AppCompatActivity {
                     FileInputStream fis = openFileInput(pfadEinlesen);
                     BufferedReader br = new BufferedReader(new InputStreamReader(fis));
                     String line;
-                    while ((line=br.readLine()) != null) {
+                    DB database = DBFactory.open("/data/data/com.example.inventurprogramm/databases/DatenEinlesenDB");
+                    while ((line = br.readLine()) != null) {
                         String[] stammdatenArray = line.split(";");
-                        //Noch in Datenbank
-                        String speichernNoch = stammdatenArray[0];
+                        database.put(stammdatenArray[0], stammdatenArray[1]);
                     }
                     br.close();
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (SnappydbException e) {
                     e.printStackTrace();
                 }
 
