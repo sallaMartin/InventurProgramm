@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -25,11 +26,15 @@ import com.snappydb.SnappyDB;
 import com.snappydb.SnappydbException;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -160,6 +165,22 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.subitemDatenAusgeben:
                 //Code
+                String filename2 = "test4.txt";
+                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filename2);
+
+                try {
+                    FileOutputStream fos = new FileOutputStream(file);
+                    PrintWriter out = new PrintWriter(new OutputStreamWriter(fos));
+                    out.println("test");
+                    out.flush();
+                    out.close();
+                    fos.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 return true;
             case R.id.subitemPfadeAendern:
                 Intent intentpfadAendernAcitivity = new Intent(getBaseContext(), ChangePathActivity.class);
