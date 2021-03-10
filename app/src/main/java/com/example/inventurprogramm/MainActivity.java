@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
@@ -54,7 +55,10 @@ public class MainActivity extends AppCompatActivity {
 
     List<Eintrag> arry = new ArrayList<>();
     String ean;
-    
+
+    SQLiteDatabase mydatabase;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,12 +78,17 @@ public class MainActivity extends AppCompatActivity {
         TempEintraegeFactory.getFilledList();
         vergleichEAN();
 
+        mydatabase = openOrCreateDatabase("databases", MODE_PRIVATE, null);
+        //mydatabase.execSQL("DROP TABLE Eintrag;");
+        mydatabase.execSQL("CREATE TABLE IF NOT EXISTS Eintrag(id Integer, bezeichnung VARCHAR, menge VARCHAR, lagerort VARCHAR, ean VARCHAR)");
+        mydatabase.execSQL("CREATE TABLE IF NOT EXISTS Stammdaten(id Integer, ean VARCHAR, bezeichnung VARCHAR)");
+
         buttonSpeichern.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveNewEintrag();
 
-                try {
+                /*try {
                     DB snappyDB =  DBFactory.open("/data/data/com.example.inventurprogramm/databases/DatabaseTest");//TODO pfad eingeben
                     //Schreibt Daten mittels EAN in die Datenbank
                     snappyDB.put(ean, new Eintrag(ean,plainTextMenge.getText().toString(),plainTextLagerort.getText().toString()));
@@ -87,6 +96,21 @@ public class MainActivity extends AppCompatActivity {
                 } catch (SnappydbException snappydbException) {
                     snappydbException.printStackTrace();
                 }
+
+                 */
+
+
+
+                int id = 1;
+                String ean = plainTextEan.getText().toString();
+                String menge = plainTextMenge.getText().toString();
+                String lagerort = plainTextLagerort.getText().toString();
+                String bezeichnung = "bezeichnungTest";
+                mydatabase.execSQL("Insert INTO Eintrag (id, bezeichnung, menge, lagerort, ean) Values( ?, ?, ?, ?, ?)", new Object[]{id, bezeichnung, menge, lagerort, ean});
+
+
+
+
 
                 plainTextEan.setText("");
                 plainTextLagerort.setText("");
@@ -147,17 +171,14 @@ public class MainActivity extends AppCompatActivity {
                     FileInputStream fis = openFileInput(pfadEinlesen);
                     BufferedReader br = new BufferedReader(new InputStreamReader(fis));
                     String line;
-                    DB database = DBFactory.open("/data/data/com.example.inventurprogramm/databases/DatenEinlesenDB");
                     while ((line = br.readLine()) != null) {
                         String[] stammdatenArray = line.split(";");
-                        database.put(stammdatenArray[0], stammdatenArray[1]);
+
                     }
                     br.close();
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (SnappydbException e) {
                     e.printStackTrace();
                 }
 
