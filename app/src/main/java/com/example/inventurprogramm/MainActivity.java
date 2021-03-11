@@ -173,6 +173,9 @@ public class MainActivity extends AppCompatActivity {
                     String line;
                     while ((line = br.readLine()) != null) {
                         String[] stammdatenArray = line.split(";");
+                        int id = 1;
+                        mydatabase.execSQL("Insert INTO Stammdaten (id, ean, bezeichnung) Values( ?, ?, ?)", new Object[]{id, stammdatenArray[0], stammdatenArray[1]});
+
 
                     }
                     br.close();
