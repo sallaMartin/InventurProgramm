@@ -250,39 +250,49 @@ public class MainActivity extends AppCompatActivity {
 
 
                TempEintraegeFactory tempEintraegeFactory = new TempEintraegeFactory();
-               arry = tempEintraegeFactory.getFilledList();
+               //arry = tempEintraegeFactory.getFilledList();
 
 
 
 
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
-                Cursor result = db.rawQuery("Select ean from Stammdaten", null);
+                Cursor result = db.rawQuery("Select ean from Stammdaten;", null);
 
                String eintragEan;
                String stammDatenEan;
 
                 if (s.length() > 7 && s.length() < 14) {
                     ean = plainTextEan.getText().toString();
+
                     //Toast.makeText(MainActivity.this, ean+ " ", Toast.LENGTH_SHORT).show();
                     while (result != null && result.moveToNext()) {
 
-                        stammDatenEan = result.getString(0);
+                        stammDatenEan = result.getString(0); //Der hier muss auch die ganze list durch gehen
 
-                        for (int i = 1; i < arry.size(); i++) { //TODO eventueller Bug fix findet manchmal zwar denn EAN aber schreibt nicht gefunden hin
+                        result = db.rawQuery("Select count(*) from Stammdaten;",null);
+                        result.moveToFirst();
+                        int length = result.getInt(0);
 
-                            if (stammDatenEan.equals(ean)) {
+                        Cursor bitte = db.rawQuery("Select  ean from Stammdaten;",null);
+
+                        for (int i = 0; i < length; i++) { //TODO eventueller Bug fix findet manchmal zwar denn EAN aber schreibt nicht gefunden hin
+                        int lauf = 0;
+                            bitte.moveToNext();
+                            stammDatenEan = bitte.getString(lauf);
+                            if (stammDatenEan.equals(ean)) { //stammDatenEan.equals(ean)
                                 textViewEanNichtGefunden.setText(" ");
                                 plainTextLagerort.setText("");
                                 plainTextMenge.setText("");
                                 textViewEanNichtGefunden.setText("Der EAN wurde gefunden");
 
-                                // plainTextMenge.setText(arry.get(i).getMenge());
+                                //plainTextMenge.setText(arry.get(i).getMenge());
                                 //plainTextLagerort.setText(arry.get(i).getLagerort());
 
 
                                 break;
                             } else {
                                 textViewEanNichtGefunden.setText("Der EAN wurde nicht gefunden");
+                            lauf++;
                             }
                         }
 
