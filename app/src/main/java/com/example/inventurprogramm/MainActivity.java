@@ -59,8 +59,11 @@ public class MainActivity extends AppCompatActivity {
     TextView textViewStamm;
     TextView textViewEingabe;
 
+
     List<Eintrag> arry = new ArrayList<>();
     String ean;
+    String bezeichnung = null;
+
 
     MySQLiteHelper dbHelper = new MySQLiteHelper(this);//TODO
 
@@ -114,8 +117,8 @@ public class MainActivity extends AppCompatActivity {
                 String ean = plainTextEan.getText().toString();
                 String menge = plainTextMenge.getText().toString();
                 String lagerort = plainTextLagerort.getText().toString();
-                String bezeichnung = "bezeichnungTest";
-                mydatabase.execSQL("Insert INTO Stammdaten (TODO Insert INTO Eintrag (id, bezeichnung, menge, lagerort, ean) Values( ?, ?, ?, ?, ?)", new Object[]{id, bezeichnung, menge, lagerort, ean});//TODO Insert INTO Eintrag statt Stammdaten
+                //TODO Hier soll Bezeichnung von Stammdaten stehen
+                mydatabase.execSQL("Insert INTO Eintrag (id, bezeichnung, menge, lagerort, ean) Values( ?, ?, ?, ?, ?)", new Object[]{id, bezeichnung, menge, lagerort, ean});//TODO Insert INTO Eintrag statt Stammdaten
                 // Für Stammdaten Insert INTO Stammdaten (id, ean, bezeichnung) Values( ?, ?, ?)", new Object[]{id, ean ,bezeichnung
 
 
@@ -274,15 +277,17 @@ public class MainActivity extends AppCompatActivity {
                         int length = result.getInt(0);
 
                         Cursor bitte = db.rawQuery("Select  ean from Stammdaten;",null);
-
-                        for (int i = 0; i < length; i++) { //TODO eventueller Bug fix findet manchmal zwar denn EAN aber schreibt nicht gefunden hin
+                        Cursor stammBezeichnung = db.rawQuery("Select bezeichnung from Stammdaten;",null);
+                        for (int i = 0; i < length; i++) {
                         int lauf = 0;
+                            stammBezeichnung.moveToNext();
                             bitte.moveToNext();
                             stammDatenEan = bitte.getString(lauf);
                             if (stammDatenEan.equals(ean)) { //stammDatenEan.equals(ean)
                                 textViewEanNichtGefunden.setText(" ");
                                 plainTextLagerort.setText("");
                                 plainTextMenge.setText("");
+                                bezeichnung = stammBezeichnung.getString(lauf);
                                 textViewEanNichtGefunden.setText("Der EAN wurde gefunden");
 
                                 //plainTextMenge.setText(arry.get(i).getMenge());
