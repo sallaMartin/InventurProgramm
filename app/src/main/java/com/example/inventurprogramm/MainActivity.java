@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     List<Eintrag> arry = new ArrayList<>();
     String ean;
     String bezeichnung = null;
-
+    Boolean eanGefunden = false;
 
     MySQLiteHelper dbHelper = new MySQLiteHelper(this);//TODO
 
@@ -110,22 +112,55 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                  */
-
-
-
                 int id = 1;
                 String ean = plainTextEan.getText().toString();
                 String menge = plainTextMenge.getText().toString();
                 String lagerort = plainTextLagerort.getText().toString();
-                //TODO Hier soll Bezeichnung von Stammdaten stehen
-                mydatabase.execSQL("Insert INTO Eintrag (id, bezeichnung, menge, lagerort, ean) Values( ?, ?, ?, ?, ?)", new Object[]{id, bezeichnung, menge, lagerort, ean});//TODO Insert INTO Eintrag statt Stammdaten
-                // Für Stammdaten Insert INTO Stammdaten (id, ean, bezeichnung) Values( ?, ?, ?)", new Object[]{id, ean ,bezeichnung
+                if (eanGefunden) {
+
+                    mydatabase.execSQL("Insert INTO Eintrag (id, bezeichnung, menge, lagerort, ean) Values( ?, ?, ?, ?, ?)", new Object[]{id, bezeichnung, menge, lagerort, ean});//TODO Insert INTO Eintrag statt Stammdaten
+                    // Für Stammdaten Insert INTO Stammdaten (id, ean, bezeichnung) Values( ?, ?, ?)", new Object[]{id, ean ,bezeichnung
+                    plainTextEan.setText("");
+                    plainTextLagerort.setText("");
+                    plainTextMenge.setText("");
+                }else{
+                    Log.e("Wrong","Der Ean ist zukurz");
+                    final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                    alertDialogBuilder.setTitle("Wollen Sie Speichern "+"\n" +"Ean ist zukurz");
+                    alertDialogBuilder.setCancelable(false);
+
+                    alertDialogBuilder.setPositiveButton("JA", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            int id = 1;
+                            String ean = plainTextEan.getText().toString();
+                            String menge = plainTextMenge.getText().toString();
+                            String lagerort = plainTextLagerort.getText().toString();
+                            bezeichnung = null;
+                            mydatabase.execSQL("Insert INTO Eintrag (id, bezeichnung, menge, lagerort, ean) Values( ?, ?, ?, ?, ?)", new Object[]{id, bezeichnung, menge, lagerort, ean});
+
+                            plainTextEan.setText("");
+                            plainTextLagerort.setText("");
+                            plainTextMenge.setText("");
+                        }
+                    });
+
+                    alertDialogBuilder.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
 
 
 
-                plainTextEan.setText("");
-                plainTextLagerort.setText("");
-                plainTextMenge.setText("");
+
+
+alertDialogBuilder.show();
+                }
+
+
+
             }
         });
 
@@ -289,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
                                 plainTextMenge.setText("");
                                 bezeichnung = stammBezeichnung.getString(lauf);
                                 textViewEanNichtGefunden.setText("Der EAN wurde gefunden");
-
+                                eanGefunden = true;
                                 //plainTextMenge.setText(arry.get(i).getMenge());
                                 //plainTextLagerort.setText(arry.get(i).getLagerort());
 
@@ -298,6 +333,8 @@ public class MainActivity extends AppCompatActivity {
                             } else {
                                 textViewEanNichtGefunden.setText("Der EAN wurde nicht gefunden");
                             lauf++;
+
+                            eanGefunden = false;
                             }
                         }
 
