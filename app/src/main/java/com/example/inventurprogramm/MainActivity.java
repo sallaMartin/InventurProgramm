@@ -1,12 +1,18 @@
 package com.example.inventurprogramm;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -25,11 +31,15 @@ import com.snappydb.SnappyDB;
 import com.snappydb.SnappydbException;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -37,6 +47,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final static String DB_NAME = "databases";
+    private static final int DB_VERSION = 1;
     EditText plainTextEan;
     TextView textViewEanNichtGefunden;
 
@@ -49,7 +61,12 @@ public class MainActivity extends AppCompatActivity {
 
     List<Eintrag> arry = new ArrayList<>();
     String ean;
-    
+
+    MySQLiteHelper dbHelper = new MySQLiteHelper(this);//TODO
+
+    SQLiteDatabase mydatabase;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,12 +86,18 @@ public class MainActivity extends AppCompatActivity {
         TempEintraegeFactory.getFilledList();
         vergleichEAN();
 
+
+        mydatabase = openOrCreateDatabase("databases", MODE_PRIVATE, null);
+        //mydatabase.execSQL("DROP TABLE Eintrag;");
+        mydatabase.execSQL("CREATE TABLE IF NOT EXISTS Eintrag(id Integer, bezeichnung VARCHAR, menge VARCHAR, lagerort VARCHAR, ean VARCHAR)");
+        mydatabase.execSQL("CREATE TABLE IF NOT EXISTS Stammdaten(id Integer, ean VARCHAR, bezeichnung VARCHAR)");
+
         buttonSpeichern.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveNewEintrag();
 
-                try {
+                /*try {
                     DB snappyDB =  DBFactory.open("/data/data/com.example.inventurprogramm/databases/DatabaseTest");//TODO pfad eingeben
                     //Schreibt Daten mittels EAN in die Datenbank
                     snappyDB.put(ean, new Eintrag(ean,plainTextMenge.getText().toString(),plainTextLagerort.getText().toString()));
@@ -82,6 +105,20 @@ public class MainActivity extends AppCompatActivity {
                 } catch (SnappydbException snappydbException) {
                     snappydbException.printStackTrace();
                 }
+
+                 */
+
+
+
+                int id = 1;
+                String ean = plainTextEan.getText().toString();
+                String menge = plainTextMenge.getText().toString();
+                String lagerort = plainTextLagerort.getText().toString();
+                String bezeichnung = "bezeichnungTest";
+                mydatabase.execSQL("Insert INTO Stammdaten (TODO Insert INTO Eintrag (id, bezeichnung, menge, lagerort, ean) Values( ?, ?, ?, ?, ?)", new Object[]{id, bezeichnung, menge, lagerort, ean});//TODO Insert INTO Eintrag statt Stammdaten
+                // Für Stammdaten Insert INTO Stammdaten (id, ean, bezeichnung) Values( ?, ?, ?)", new Object[]{id, ean ,bezeichnung
+
+
 
                 plainTextEan.setText("");
                 plainTextLagerort.setText("");
@@ -142,17 +179,17 @@ public class MainActivity extends AppCompatActivity {
                     FileInputStream fis = openFileInput(pfadEinlesen);
                     BufferedReader br = new BufferedReader(new InputStreamReader(fis));
                     String line;
-                    DB database = DBFactory.open("/data/data/com.example.inventurprogramm/databases/DatenEinlesenDB");
                     while ((line = br.readLine()) != null) {
                         String[] stammdatenArray = line.split(";");
-                        database.put(stammdatenArray[0], stammdatenArray[1]);
+                        int id = 1;
+                        mydatabase.execSQL("Insert INTO Stammdaten (id, ean, bezeichnung) Values( ?, ?, ?)", new Object[]{id, stammdatenArray[0], stammdatenArray[1]});
+
+
                     }
                     br.close();
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (SnappydbException e) {
                     e.printStackTrace();
                 }
 
@@ -160,6 +197,22 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.subitemDatenAusgeben:
                 //Code
+                String filename2 = "test4.txt";
+                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filename2);
+
+                try {
+                    FileOutputStream fos = new FileOutputStream(file);
+                    PrintWriter out = new PrintWriter(new OutputStreamWriter(fos));
+                    out.println("test");
+                    out.flush();
+                    out.close();
+                    fos.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 return true;
             case R.id.subitemPfadeAendern:
                 Intent intentpfadAendernAcitivity = new Intent(getBaseContext(), ChangePathActivity.class);
@@ -182,49 +235,82 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void vergleichEAN(){
+
         plainTextEan.addTextChangedListener(new TextWatcher() {
+
+
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                TempEintraegeFactory tempEintraegeFactory = new TempEintraegeFactory();
-               arry = tempEintraegeFactory.getFilledList();
 
-                if(s.length() > 7 && s.length() < 14){
-                   ean =  plainTextEan.getText().toString();
-                   //Toast.makeText(MainActivity.this, ean+ " ", Toast.LENGTH_SHORT).show();
-                    Eintrag e = new Eintrag(ean);
-
-                    for(int i = 1; i < arry.size() ; i++){
-                     if(arry.get(i).getEan().equals(ean)) {
-                         textViewEanNichtGefunden.setText(" ");
-                         plainTextLagerort.setText("");
-                         plainTextMenge.setText("");
-                         textViewEanNichtGefunden.setText("Der EAN wurde gefunden");
-                         plainTextMenge.setText(arry.get(i).getMenge());
-                         plainTextLagerort.setText(arry.get(i).getLagerort());
-                         break;
-                     } else
-                     {
-                         textViewEanNichtGefunden.setText("Der EAN wurde nicht gefunden");
-                     }
-
-                 }
+               TempEintraegeFactory tempEintraegeFactory = new TempEintraegeFactory();
+               //arry = tempEintraegeFactory.getFilledList();
 
 
-                }else{
-                    //Toast.makeText(MainActivity.this, "Ean hat nicht die richtige Länge", Toast.LENGTH_SHORT).show();
-                  //  textViewEanNichtGefunden.setText("");
-                    textViewEanNichtGefunden.setText("Ean hat nicht die richtige Länge");
-                    plainTextLagerort.setText("");
-                    plainTextMenge.setText("");
-                }
 
 
+                SQLiteDatabase db = dbHelper.getReadableDatabase();
+                Cursor result = db.rawQuery("Select ean from Stammdaten;", null);
+
+               String eintragEan;
+               String stammDatenEan;
+
+                if (s.length() > 7 && s.length() < 14) {
+                    ean = plainTextEan.getText().toString();
+
+                    //Toast.makeText(MainActivity.this, ean+ " ", Toast.LENGTH_SHORT).show();
+                    while (result != null && result.moveToNext()) {
+
+                        stammDatenEan = result.getString(0); //Der hier muss auch die ganze list durch gehen
+
+                        result = db.rawQuery("Select count(*) from Stammdaten;",null);
+                        result.moveToFirst();
+                        int length = result.getInt(0);
+
+                        Cursor bitte = db.rawQuery("Select  ean from Stammdaten;",null);
+
+                        for (int i = 0; i < length; i++) { //TODO eventueller Bug fix findet manchmal zwar denn EAN aber schreibt nicht gefunden hin
+                        int lauf = 0;
+                            bitte.moveToNext();
+                            stammDatenEan = bitte.getString(lauf);
+                            if (stammDatenEan.equals(ean)) { //stammDatenEan.equals(ean)
+                                textViewEanNichtGefunden.setText(" ");
+                                plainTextLagerort.setText("");
+                                plainTextMenge.setText("");
+                                textViewEanNichtGefunden.setText("Der EAN wurde gefunden");
+
+                                //plainTextMenge.setText(arry.get(i).getMenge());
+                                //plainTextLagerort.setText(arry.get(i).getLagerort());
+
+
+                                break;
+                            } else {
+                                textViewEanNichtGefunden.setText("Der EAN wurde nicht gefunden");
+                            lauf++;
+                            }
+                        }
+
+                    }
+                    }else{
+                        //Toast.makeText(MainActivity.this, "Ean hat nicht die richtige Länge", Toast.LENGTH_SHORT).show();
+                        //  textViewEanNichtGefunden.setText("");
+                        textViewEanNichtGefunden.setText("Ean hat nicht die richtige Länge");
+                        plainTextLagerort.setText("");
+                        plainTextMenge.setText("");
+                    }
+
+
+/*
+                rows.close();
+                db.close();
+
+ */
 
             }
 
@@ -236,8 +322,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private class MySQLiteHelper extends SQLiteOpenHelper {
 
+        public MySQLiteHelper(@Nullable Context context){
 
+            super(context, DB_NAME, null, DB_VERSION);
 
+        }
 
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+        }
+    }
 }

@@ -31,10 +31,9 @@ public class ChangePathActivity extends AppCompatActivity {
         switch (requestCode) {
             case 10:
                 if (resultCode == RESULT_OK) {
-                    String path = data.getData().getPath(); //pfad!
+                    String path = data.getData().getPath(); //pfad
                     plainTextLesepfad.setText(path);
                 }
-
                 break;
         }
     }
