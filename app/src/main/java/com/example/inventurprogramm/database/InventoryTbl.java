@@ -12,24 +12,27 @@ public class InventoryTbl {
     public static final String SQL_CREATE =
             "CREATE TABLE " + TABLE_NAME +
                     " (" +
-                    Inventory_ID + " INTEGER IDENTITY(1,1) PRIMARY KEY,"+
+                    EAN + " VARCHAR," +
                     Bezeichnung + " VARCHAR," +
                     Menge + " VARCHAR," +
                     Lagerort + " VARCHAR," +
-                    EAN + " VARCHAR" +
+                    Inventory_ID + " INTEGER PRIMARY KEY"+
                     ")";
+
+    public static final String SQL_DROP =
+            "DROP TABLE IF EXISTS " + TABLE_NAME;
 
     public static final String STMT_INSERT =
             "INSERT INTO " + TABLE_NAME +
-                    " (" + Bezeichnung + ", " + Menge + ", " + Lagerort + ", " + EAN + ")" +
+                    " (" + EAN + ", " + Bezeichnung + ", " + Menge + ", " + Lagerort + ")" +
                     " VALUES (?,?,?,?)";
 
     public static final String STMT_UPDATE =
             "UPDATE " + TABLE_NAME + " SET " +
+                    EAN + " = ?, " +
                     Bezeichnung + " = ?, " +
                     Menge + " = ?, " +
-                    Lagerort + " = ?, " +
-                    EAN + " = ? " +
+                    Lagerort + " = ? " +
                     "WHERE "+ Inventory_ID +" = ?";
 
 
