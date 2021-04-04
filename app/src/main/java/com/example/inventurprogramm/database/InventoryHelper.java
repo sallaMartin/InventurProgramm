@@ -22,6 +22,7 @@ public class InventoryHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-
+        db.execSQL(InventoryTbl.SQL_DROP);
+        db.execSQL(InventoryTbl.SQL_CREATE);
     }
 }
