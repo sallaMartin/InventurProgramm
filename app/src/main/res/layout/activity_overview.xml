@@ -34,11 +34,36 @@
         </EditText>
     </LinearLayout>
 
+    <EditText
+        android:id="@+id/editTextTest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name" />
+
+    <Button
+        android:id="@+id/buttonPrev"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:text="Prev" />
+
+    <Button
+        android:id="@+id/buttonNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:text="Next" />
+
+    <!--
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         >
+
 
         <ScrollView
             android:layout_width="match_parent"
@@ -49,7 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"></TableLayout>
         </ScrollView>
-
     </HorizontalScrollView>
+    -->
 
 </LinearLayout>

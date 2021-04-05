@@ -10,7 +10,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
@@ -29,6 +31,9 @@ import java.util.ArrayList;
 
 public class OverviewActivity extends AppCompatActivity {
     private SQLiteDatabase inventoryDB;
+    private int page_nr = 0;
+    private int page_amount = 0;
+    private int entry_amount = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +44,66 @@ public class OverviewActivity extends AppCompatActivity {
         InventoryHelper inventoryHelper = new InventoryHelper(this);
         inventoryDB = inventoryHelper.getReadableDatabase();
 
+
+        //Pagination
+        Button prev = findViewById(R.id.buttonPrev);
+        Button next = findViewById(R.id.buttonNext);
+        TextView test = findViewById(R.id.editTextTest);
+
+        makePage();
+
+        prev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(page_nr > -1){
+                    page_nr--;
+                    Cursor pageCursor = inventoryDB.rawQuery("SELECT * FROM " + InventoryTbl.TABLE_NAME + " limit " + page_nr*entry_amount + ", " + entry_amount, null);
+                    String test = "";
+                    while(pageCursor.moveToNext()){
+                        test += pageCursor.getString(0) + ";";
+                    }
+                    pageCursor.close();
+                    TextView testView = findViewById(R.id.editTextTest);
+                    testView.setText(test);
+
+                }
+            }
+        });
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(page_nr < page_amount-1){
+                    page_nr++;
+                    Cursor pageCursor = inventoryDB.rawQuery("SELECT * FROM " + InventoryTbl.TABLE_NAME + " limit " + page_nr*entry_amount + ", " + entry_amount, null);
+                    String test = "";
+                    while(pageCursor.moveToNext()){
+                        test += pageCursor.getString(0) + ";";
+                    }
+                    pageCursor.close();
+                    TextView testView = findViewById(R.id.editTextTest);
+                    testView.setText(test);
+                }
+            }
+        });
+
         //make table
-        makeTable();
+        //makeTable();
 
         //back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    private void makePage() {
+        Cursor amountCursor = inventoryDB.rawQuery(InventoryTbl.STMT_COUNT, null);
+        amountCursor.moveToNext();
+        int amount = amountCursor.getInt(0);
+        amountCursor.close();
+
+        page_amount = ((double) amount/entry_amount % 1 == 0) ? (int) ((double) amount/entry_amount) : (int) Math.ceil((double) amount/entry_amount);
+    }
+
+    /*
     private void makeTable(){
         TableLayout t_layout = (TableLayout) findViewById(R.id.main_table);
 
@@ -125,7 +183,7 @@ public class OverviewActivity extends AppCompatActivity {
 
             tr_id++;
         }
-        /*
+
         //später per Datenbank
         for(int i = 0; i < TempEintraegeFactory.eintraege.size(); i++){
             TableRow tr = new TableRow(this);
@@ -148,7 +206,7 @@ public class OverviewActivity extends AppCompatActivity {
 
         } // end of for loop
 
-         */
+
     }
 
     private TextView generateTableCell(String text){
@@ -162,6 +220,7 @@ public class OverviewActivity extends AppCompatActivity {
 
         return t_label;
     }
+    */
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
