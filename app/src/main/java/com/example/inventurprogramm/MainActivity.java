@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
 
                     eanGefunden = false;
                 } else {
-                    /*
+
                     Log.e("Wrong", "Der Ean ist zukurz");
                     final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
                     alertDialogBuilder.setTitle("Wollen Sie Speichern " + "\n" + "Ean ist zukurz");
@@ -117,11 +117,12 @@ public class MainActivity extends AppCompatActivity {
                     alertDialogBuilder.setPositiveButton("JA", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String ean = plainTextEan.getText().toString();
-                            String menge = plainTextMenge.getText().toString();
-                            String lagerort = plainTextLagerort.getText().toString();
-                            bezeichnung = null;
-                            inventoryDB.execSQL(InventoryTbl.STMT_INSERT, new Object[]{ean, bezeichnung, menge, lagerort});
+                            String tempEAN = plainTextEan.getText().toString();
+                            String tempMenge = plainTextMenge.getText().toString();
+                            String tempLagerort = plainTextLagerort.getText().toString();
+                            String tempBezeichnung = "";
+
+                            inventoryDB.execSQL(InventoryTbl.STMT_INSERT, new Object[]{tempEAN, tempBezeichnung, tempMenge, tempLagerort});
                             plainTextEan.setText("");
                             plainTextLagerort.setText("");
                             plainTextMenge.setText("");
@@ -137,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
 
 
                     alertDialogBuilder.show();
-                     */
                 }
             }
         });
@@ -260,13 +260,15 @@ public class MainActivity extends AppCompatActivity {
                         String stammdatenEAN = eanCursor.getString(0);
 
                         if (stammdatenEAN.equals(tempEAN)) { //stammDatenEan.equals(ean)
+                            /* weitere Werte aus Stammdaten einsetzen
                             Cursor eintragCursor = stammdatenDB.rawQuery(StammdatenTbl.STMT_SELECT_WHERE_EAN, new String[]{stammdatenEAN});
                             eintragCursor.moveToNext();
                             plainTextMenge.setText("" + eintragCursor.getString(2));
                             plainTextLagerort.setText("" + eintragCursor.getString(3));
+                            eintragCursor.close();
+                             */
                             textViewEanVergleich.setText("Der EAN wurde gefunden");
 
-                            eintragCursor.close();
                             eanGefunden = true;
                             break;
                         } else {
