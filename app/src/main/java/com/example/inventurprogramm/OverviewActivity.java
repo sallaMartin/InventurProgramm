@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ActionBar;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +17,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.example.inventurprogramm.database.InventoryHelper;
+import com.example.inventurprogramm.database.InventoryTbl;
 import com.example.inventurprogramm.model.Eintrag;
 import com.example.inventurprogramm.model.TempEintraegeFactory;
 import com.snappydb.DB;
@@ -24,22 +28,16 @@ import com.snappydb.SnappydbException;
 import java.util.ArrayList;
 
 public class OverviewActivity extends AppCompatActivity {
+    private SQLiteDatabase inventoryDB;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
         setTitle(R.string.menuItemUebersicht);
 
-        try {
-            DB snappyDB =  DBFactory.open("/data/data/com.example.inventurprogramm/databases/DatabaseTest");//TODO pfad eingeben
-
-            Eintrag e = snappyDB.getObject("1111111111", Eintrag.class);
-            Log.i("test", "" + e.getLagerort() + e.toString());
-
-
-        } catch (SnappydbException snappydbException) {
-            snappydbException.printStackTrace();
-        }
+        InventoryHelper inventoryHelper = new InventoryHelper(this);
+        inventoryDB = inventoryHelper.getReadableDatabase();
 
         //make table
         makeTable();
@@ -97,6 +95,37 @@ public class OverviewActivity extends AppCompatActivity {
                 TableLayout.LayoutParams.WRAP_CONTENT));
 
         ScrollView sv = new ScrollView(this);
+
+        Cursor eintragCursor = inventoryDB.rawQuery(InventoryTbl.STMT_SELECT, null);
+        int tr_id = 0;
+        while(eintragCursor.moveToNext()){
+            TableRow tr = new TableRow(this);
+            tr.setId(tr_id);
+            tr.setBackgroundColor(Color.GRAY);
+            tr.setLayoutParams(new TableLayout.LayoutParams(
+                    TableLayout.LayoutParams.MATCH_PARENT,
+                    TableLayout.LayoutParams.WRAP_CONTENT));
+
+            // Here we create the TextView dynamically
+            Eintrag e = new Eintrag(
+                    eintragCursor.getString(0),
+                    eintragCursor.getString(1),
+                    eintragCursor.getString(2),
+                    eintragCursor.getString(3),
+                    "" + eintragCursor.getInt(4));
+
+            tr.addView(generateTableCell(e.getBezeichnung()));
+            tr.addView(generateTableCell(e.getMenge()));
+            tr.addView(generateTableCell(e.getLagerort()));
+            tr.addView(generateTableCell(e.getEan()));
+
+            t_layout.addView(tr, new TableLayout.LayoutParams(
+                    TableLayout.LayoutParams.MATCH_PARENT,
+                    TableLayout.LayoutParams.WRAP_CONTENT));
+
+            tr_id++;
+        }
+        /*
         //später per Datenbank
         for(int i = 0; i < TempEintraegeFactory.eintraege.size(); i++){
             TableRow tr = new TableRow(this);
@@ -118,6 +147,8 @@ public class OverviewActivity extends AppCompatActivity {
                     TableLayout.LayoutParams.WRAP_CONTENT));
 
         } // end of for loop
+
+         */
     }
 
     private TextView generateTableCell(String text){

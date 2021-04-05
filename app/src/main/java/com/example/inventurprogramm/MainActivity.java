@@ -1,17 +1,13 @@
 package com.example.inventurprogramm;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
@@ -25,120 +21,108 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.inventurprogramm.database.InventoryHelper;
+import com.example.inventurprogramm.database.InventoryTbl;
+import com.example.inventurprogramm.database.StammdatenHelper;
+import com.example.inventurprogramm.database.StammdatenTbl;
 import com.example.inventurprogramm.model.Eintrag;
 import com.example.inventurprogramm.model.TempEintraegeFactory;
-import com.snappydb.DB;
-import com.snappydb.DBFactory;
-import com.snappydb.SnappyDB;
-import com.snappydb.SnappydbException;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private final static String DB_NAME = "databases";
     private static final int DB_VERSION = 1;
-    EditText plainTextEan;
-    TextView textViewEanNichtGefunden;
 
-    EditText plainTextMenge;
-    EditText plainTextLagerort;
+    //UI-Komponenten
+    private EditText plainTextEan;
+    private TextView textViewEanVergleich;
 
-    Button buttonSpeichern;
-    TextView textViewStamm;
-    TextView textViewEingabe;
+    private EditText plainTextMenge;
+    private EditText plainTextLagerort;
 
+    private Button buttonSpeichern;
+    private TextView textViewStamm;
+    private TextView textViewEingabe;
 
-    List<Eintrag> arry = new ArrayList<>();
-    String ean;
-    String bezeichnung = null;
-    Boolean eanGefunden = false;
+    private Boolean eanGefunden = false;
 
-    MySQLiteHelper dbHelper = new MySQLiteHelper(this);//TODO
-
-    SQLiteDatabase mydatabase;
-
-
+    private SQLiteDatabase inventoryDB;
+    private SQLiteDatabase stammdatenDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        plainTextEan = (EditText) findViewById(R.id.plainTextEanView);
-        textViewEanNichtGefunden = (TextView) findViewById(R.id.textViewEanNichtGefundenView);
+        //UI-Komponenten initalisieren
+        plainTextEan = findViewById(R.id.plainTextEanView);
+        textViewEanVergleich = findViewById(R.id.textViewEanVergleich);
 
-        plainTextMenge = (EditText) findViewById(R.id.plainTextMengeView);
-        plainTextLagerort = (EditText) findViewById(R.id.plainTextLagerortView);
+        plainTextMenge = findViewById(R.id.plainTextMengeView);
+        plainTextLagerort = findViewById(R.id.plainTextLagerortView);
 
-        buttonSpeichern = (Button) findViewById(R.id.buttonSpeichernView);
-        textViewStamm = (TextView) findViewById(R.id.textViewStammView);
-        textViewEingabe = (TextView) findViewById(R.id.textViewEingabeView);
+        buttonSpeichern = findViewById(R.id.buttonSpeichernView);
+        textViewStamm = findViewById(R.id.textViewStammView);
+        textViewEingabe = findViewById(R.id.textViewEingabeView);
 
-        TempEintraegeFactory.getFilledList();
+        //fortlaufenden EAN-Vergleich initalisieren
         vergleichEAN();
 
+        //Databases initalisieren
+        InventoryHelper inventoryHelper = new InventoryHelper(this);
+        inventoryDB = inventoryHelper.getReadableDatabase();
+        StammdatenHelper stammdatenHelper = new StammdatenHelper(this);
+        stammdatenDB = stammdatenHelper.getReadableDatabase();
 
-        mydatabase = openOrCreateDatabase("databases", MODE_PRIVATE, null);
-        //mydatabase.execSQL("DROP TABLE Eintrag;");
-        mydatabase.execSQL("CREATE TABLE IF NOT EXISTS Eintrag(id Integer, bezeichnung VARCHAR, menge VARCHAR, lagerort VARCHAR, ean VARCHAR)");
-        mydatabase.execSQL("CREATE TABLE IF NOT EXISTS Stammdaten(id Integer, ean VARCHAR, bezeichnung VARCHAR)");
 
         buttonSpeichern.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveNewEintrag();
 
-                /*try {
-                    DB snappyDB =  DBFactory.open("/data/data/com.example.inventurprogramm/databases/DatabaseTest");//TODO pfad eingeben
-                    //Schreibt Daten mittels EAN in die Datenbank
-                    snappyDB.put(ean, new Eintrag(ean,plainTextMenge.getText().toString(),plainTextLagerort.getText().toString()));
-
-                } catch (SnappydbException snappydbException) {
-                    snappydbException.printStackTrace();
-                }
-
-                 */
-                int id = 1;
-                String ean = plainTextEan.getText().toString();
-                String menge = plainTextMenge.getText().toString();
-                String lagerort = plainTextLagerort.getText().toString();
                 if (eanGefunden) {
+                    String tempEAN = plainTextEan.getText().toString();
+                    String tempMenge = plainTextMenge.getText().toString();
+                    String tempLagerort = plainTextLagerort.getText().toString();
 
-                    mydatabase.execSQL("Insert INTO Eintrag (id, bezeichnung, menge, lagerort, ean) Values( ?, ?, ?, ?, ?)", new Object[]{id, bezeichnung, menge, lagerort, ean});//TODO Insert INTO Eintrag statt Stammdaten
-                    // Für Stammdaten Insert INTO Stammdaten (id, ean, bezeichnung) Values( ?, ?, ?)", new Object[]{id, ean ,bezeichnung
+                    Cursor eintragCursor = stammdatenDB.rawQuery(StammdatenTbl.STMT_SELECT_WHERE_EAN, new String[]{tempEAN});
+                    eintragCursor.moveToNext();
+                    String tempBezeichnung = eintragCursor.getString(1);
+                    eintragCursor.close();
+
+                    inventoryDB.execSQL(InventoryTbl.STMT_INSERT, new Object[]{tempEAN, tempBezeichnung, tempMenge, tempLagerort});
                     plainTextEan.setText("");
                     plainTextLagerort.setText("");
                     plainTextMenge.setText("");
-                }else{
-                    Log.e("Wrong","Der Ean ist zukurz");
+
+                    eanGefunden = false;
+                } else {
+
+                    Log.e("Wrong", "Der Ean ist zukurz");
                     final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
-                    alertDialogBuilder.setTitle("Wollen Sie Speichern "+"\n" +"Ean ist zukurz");
+                    alertDialogBuilder.setTitle("Wollen Sie Speichern " + "\n" + "Ean ist zukurz");
                     alertDialogBuilder.setCancelable(false);
 
                     alertDialogBuilder.setPositiveButton("JA", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            int id = 1;
-                            String ean = plainTextEan.getText().toString();
-                            String menge = plainTextMenge.getText().toString();
-                            String lagerort = plainTextLagerort.getText().toString();
-                            bezeichnung = null;
-                            mydatabase.execSQL("Insert INTO Eintrag (id, bezeichnung, menge, lagerort, ean) Values( ?, ?, ?, ?, ?)", new Object[]{id, bezeichnung, menge, lagerort, ean});
+                            String tempEAN = plainTextEan.getText().toString();
+                            String tempMenge = plainTextMenge.getText().toString();
+                            String tempLagerort = plainTextLagerort.getText().toString();
+                            String tempBezeichnung = "";
 
+                            inventoryDB.execSQL(InventoryTbl.STMT_INSERT, new Object[]{tempEAN, tempBezeichnung, tempMenge, tempLagerort});
                             plainTextEan.setText("");
                             plainTextLagerort.setText("");
                             plainTextMenge.setText("");
@@ -153,27 +137,12 @@ public class MainActivity extends AppCompatActivity {
                     });
 
 
-
-
-
-alertDialogBuilder.show();
+                    alertDialogBuilder.show();
                 }
-
-
-
             }
         });
 
     }
-
-
-    private void saveNewEintrag() {
-        Eintrag e = new Eintrag(plainTextEan.getText().toString(), "TestEintrag" + TempEintraegeFactory.eintraege.size(), plainTextMenge.getText().toString(), plainTextLagerort.getText().toString(), "" + TempEintraegeFactory.eintraege.size() );
-        TempEintraegeFactory.eintraege.add(e);
-
-
-    }
-
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -220,7 +189,7 @@ alertDialogBuilder.show();
                     while ((line = br.readLine()) != null) {
                         String[] stammdatenArray = line.split(";");
                         int id = 1;
-                        mydatabase.execSQL("Insert INTO Stammdaten (id, ean, bezeichnung) Values( ?, ?, ?)", new Object[]{id, stammdatenArray[0], stammdatenArray[1]});
+                        //mydatabase.execSQL("Insert INTO Stammdaten (id, ean, bezeichnung) Values( ?, ?, ?)", new Object[]{id, stammdatenArray[0], stammdatenArray[1]});
 
 
                     }
@@ -265,6 +234,7 @@ alertDialogBuilder.show();
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -272,114 +242,57 @@ alertDialogBuilder.show();
         return true;
     }
 
-    public void vergleichEAN(){
 
+    public void vergleichEAN() {
         plainTextEan.addTextChangedListener(new TextWatcher() {
-
-
-
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-
-               TempEintraegeFactory tempEintraegeFactory = new TempEintraegeFactory();
-               //arry = tempEintraegeFactory.getFilledList();
-
-
-
-
-                SQLiteDatabase db = dbHelper.getReadableDatabase();
-                Cursor result = db.rawQuery("Select ean from Stammdaten;", null);
-
-               String eintragEan;
-               String stammDatenEan;
-
                 if (s.length() > 7 && s.length() < 14) {
-                    ean = plainTextEan.getText().toString();
+                    String tempEAN = plainTextEan.getText().toString();
+                    Cursor eanCursor = stammdatenDB.rawQuery(StammdatenTbl.STMT_SELECT_EAN, null);
 
-                    //Toast.makeText(MainActivity.this, ean+ " ", Toast.LENGTH_SHORT).show();
-                    while (result != null && result.moveToNext()) {
+                    while (eanCursor != null && eanCursor.moveToNext()) {
+                        String stammdatenEAN = eanCursor.getString(0);
 
-                        stammDatenEan = result.getString(0); //Der hier muss auch die ganze list durch gehen
+                        if (stammdatenEAN.equals(tempEAN)) { //stammDatenEan.equals(ean)
+                            /* weitere Werte aus Stammdaten einsetzen
+                            Cursor eintragCursor = stammdatenDB.rawQuery(StammdatenTbl.STMT_SELECT_WHERE_EAN, new String[]{stammdatenEAN});
+                            eintragCursor.moveToNext();
+                            plainTextMenge.setText("" + eintragCursor.getString(2));
+                            plainTextLagerort.setText("" + eintragCursor.getString(3));
+                            eintragCursor.close();
+                             */
+                            textViewEanVergleich.setText("Der EAN wurde gefunden");
 
-                        result = db.rawQuery("Select count(*) from Stammdaten;",null);
-                        result.moveToFirst();
-                        int length = result.getInt(0);
-
-                        Cursor bitte = db.rawQuery("Select  ean from Stammdaten;",null);
-                        Cursor stammBezeichnung = db.rawQuery("Select bezeichnung from Stammdaten;",null);
-                        for (int i = 0; i < length; i++) {
-                        int lauf = 0;
-                            stammBezeichnung.moveToNext();
-                            bitte.moveToNext();
-                            stammDatenEan = bitte.getString(lauf);
-                            if (stammDatenEan.equals(ean)) { //stammDatenEan.equals(ean)
-                                textViewEanNichtGefunden.setText(" ");
-                                plainTextLagerort.setText("");
-                                plainTextMenge.setText("");
-                                bezeichnung = stammBezeichnung.getString(lauf);
-                                textViewEanNichtGefunden.setText("Der EAN wurde gefunden");
-                                eanGefunden = true;
-                                //plainTextMenge.setText(arry.get(i).getMenge());
-                                //plainTextLagerort.setText(arry.get(i).getLagerort());
-
-
-                                break;
-                            } else {
-                                textViewEanNichtGefunden.setText("Der EAN wurde nicht gefunden");
-                            lauf++;
+                            eanGefunden = true;
+                            break;
+                        } else {
+                            textViewEanVergleich.setText("Der EAN wurde nicht gefunden");
+                            plainTextLagerort.setText("");
+                            plainTextMenge.setText("");
 
                             eanGefunden = false;
-                            }
                         }
-
-                    }
-                    }else{
-                        //Toast.makeText(MainActivity.this, "Ean hat nicht die richtige Länge", Toast.LENGTH_SHORT).show();
-                        //  textViewEanNichtGefunden.setText("");
-                        textViewEanNichtGefunden.setText("Ean hat nicht die richtige Länge");
-                        plainTextLagerort.setText("");
-                        plainTextMenge.setText("");
                     }
 
-
-/*
-                rows.close();
-                db.close();
-
- */
-
+                    eanCursor.close();
+                } else {
+                    textViewEanVergleich.setText("Ean hat nicht die richtige Länge");
+                    plainTextLagerort.setText("");
+                    plainTextMenge.setText("");
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
     }
 
 
-    private class MySQLiteHelper extends SQLiteOpenHelper {
-
-        public MySQLiteHelper(@Nullable Context context){
-
-            super(context, DB_NAME, null, DB_VERSION);
-
-        }
-
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-        }
-    }
 }
