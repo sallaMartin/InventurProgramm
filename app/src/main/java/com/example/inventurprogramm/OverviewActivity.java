@@ -3,32 +3,39 @@ package com.example.inventurprogramm;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ActionBar;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
-import android.view.ViewGroup;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ScrollView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.inventurprogramm.database.InventoryHelper;
 import com.example.inventurprogramm.database.InventoryTbl;
 import com.example.inventurprogramm.model.Eintrag;
-import com.example.inventurprogramm.model.TempEintraegeFactory;
-import com.snappydb.DB;
-import com.snappydb.DBFactory;
-import com.snappydb.SnappydbException;
+import com.example.inventurprogramm.model.EintragAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class OverviewActivity extends AppCompatActivity {
     private SQLiteDatabase inventoryDB;
+    private int current_page = 0;
+    private int page_amount = 0;
+    private int entry_amount = 10;
+
+    private ListView entryListView;
+    private List<Eintrag> entries = new ArrayList<>();
+    private EintragAdapter entryAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +46,102 @@ public class OverviewActivity extends AppCompatActivity {
         InventoryHelper inventoryHelper = new InventoryHelper(this);
         inventoryDB = inventoryHelper.getReadableDatabase();
 
-        //make table
-        makeTable();
+        //Liste initalisieren;
+        entryListView = findViewById(R.id.list_entry);
+        entryAdapter = new EintragAdapter(this, R.layout.overview_list_layout, entries);
+        entryListView.setAdapter(entryAdapter);
+
+        //Pagination
+        Button prev = findViewById(R.id.buttonPrev);
+        Button next = findViewById(R.id.buttonNext);
+
+        makePage();
+        makeSuchfilter();
+
+        prev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(current_page > 0){
+                    current_page--;
+                    updatePage();
+                }
+            }
+        });
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(current_page < page_amount-1){
+                    current_page++;
+                    updatePage();
+                }
+            }
+        });
 
         //back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    private void makeSuchfilter() {
+        EditText editSearch = findViewById(R.id.edtSearch);
+        editSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                updatePage();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+
+    private void updatePage(){
+        EditText editSearch = findViewById(R.id.edtSearch);
+        Cursor pageCursor;
+        if(editSearch.getText().toString().equals("")){
+            pageCursor = inventoryDB.rawQuery("SELECT * FROM " + InventoryTbl.TABLE_NAME + " limit " + current_page *entry_amount + ", " + entry_amount, null);
+        }else{
+            String text = editSearch.getText().toString();
+            text = "%" + text + "%";
+            pageCursor = inventoryDB.rawQuery("SELECT * FROM " + InventoryTbl.TABLE_NAME +
+                            " WHERE (" + InventoryTbl.Bezeichnung + " LIKE ? ) OR (" + InventoryTbl.Lagerort + " LIKE ? ) OR (" + InventoryTbl.Menge + " LIKE ? ) OR (" + InventoryTbl.EAN + " LIKE ? ) " +
+                            " limit " + current_page *entry_amount + ", " + entry_amount
+                    , new String[]{text, text, text, text});
+        }
+
+        entries.clear();
+        while(pageCursor.moveToNext()){
+            entries.add(new Eintrag(
+                    pageCursor.getString(0),
+                    pageCursor.getString(1),
+                    pageCursor.getString(2),
+                    pageCursor.getString(3),
+                    pageCursor.getString(4)
+            ));
+        }
+        pageCursor.close();
+        entryAdapter.notifyDataSetChanged();
+    }
+
+    private void makePage() {
+        Cursor amountCursor = inventoryDB.rawQuery(InventoryTbl.STMT_COUNT, null);
+        amountCursor.moveToNext();
+        int amount = amountCursor.getInt(0);
+        amountCursor.close();
+
+        page_amount = (int) Math.ceil((double) amount/entry_amount);
+        updatePage();
+    }
+
+    /*
     private void makeTable(){
         TableLayout t_layout = (TableLayout) findViewById(R.id.main_table);
 
@@ -125,7 +221,7 @@ public class OverviewActivity extends AppCompatActivity {
 
             tr_id++;
         }
-        /*
+
         //später per Datenbank
         for(int i = 0; i < TempEintraegeFactory.eintraege.size(); i++){
             TableRow tr = new TableRow(this);
@@ -148,7 +244,7 @@ public class OverviewActivity extends AppCompatActivity {
 
         } // end of for loop
 
-         */
+
     }
 
     private TextView generateTableCell(String text){
@@ -162,6 +258,7 @@ public class OverviewActivity extends AppCompatActivity {
 
         return t_label;
     }
+    */
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

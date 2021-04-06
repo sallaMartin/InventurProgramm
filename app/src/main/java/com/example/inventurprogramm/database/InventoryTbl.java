@@ -35,14 +35,19 @@ public class InventoryTbl {
                     Lagerort + " = ? " +
                     "WHERE "+ Inventory_ID +" = ?";
 
+    public static final String STMT_DELETE =
+            "DELETE FROM " + TABLE_NAME + " WHERE " + Inventory_ID + " = ?";
 
     public static final String STMT_SELECT =
             "SELECT * FROM " + TABLE_NAME;
 
-    public static final String PSTMT_COUNT =
+    public static final String STMT_SELECT_PAGINATION =
+            "SELECT * FROM " + TABLE_NAME + " limit ?, ?";
+
+    public static final String STMT_COUNT =
             "SELECT COUNT(*) FROM " + TABLE_NAME;
 
-    public static final String PSTMT_SELECT_ID =
+    public static final String STMT_SELECT_ID =
             "SELECT * FROM " + TABLE_NAME + " WHERE " + Inventory_ID + " = ?";
 
 }
