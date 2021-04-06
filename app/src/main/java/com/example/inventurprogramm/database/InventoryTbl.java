@@ -35,6 +35,8 @@ public class InventoryTbl {
                     Lagerort + " = ? " +
                     "WHERE "+ Inventory_ID +" = ?";
 
+    public static final String STMT_DELETE =
+            "DELETE FROM " + TABLE_NAME + " WHERE " + Inventory_ID + " = ?";
 
     public static final String STMT_SELECT =
             "SELECT * FROM " + TABLE_NAME;

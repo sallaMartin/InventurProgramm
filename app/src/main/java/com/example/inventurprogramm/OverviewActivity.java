@@ -3,37 +3,39 @@ package com.example.inventurprogramm;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ActionBar;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ScrollView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.inventurprogramm.database.InventoryHelper;
 import com.example.inventurprogramm.database.InventoryTbl;
 import com.example.inventurprogramm.model.Eintrag;
-import com.example.inventurprogramm.model.TempEintraegeFactory;
-import com.snappydb.DB;
-import com.snappydb.DBFactory;
-import com.snappydb.SnappydbException;
+import com.example.inventurprogramm.model.EintragAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class OverviewActivity extends AppCompatActivity {
     private SQLiteDatabase inventoryDB;
-    private int page_nr = 0;
+    private int current_page = 0;
     private int page_amount = 0;
     private int entry_amount = 3;
+
+    private ListView entryListView;
+    private List<Eintrag> entries = new ArrayList<>();
+    private EintragAdapter entryAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,10 @@ public class OverviewActivity extends AppCompatActivity {
         InventoryHelper inventoryHelper = new InventoryHelper(this);
         inventoryDB = inventoryHelper.getReadableDatabase();
 
+        //Liste initalisieren;
+        entryListView = findViewById(R.id.list_entry);
+        entryAdapter = new EintragAdapter(this, R.layout.overview_list_layout, entries);
+        entryListView.setAdapter(entryAdapter);
 
         //Pagination
         Button prev = findViewById(R.id.buttonPrev);
@@ -51,21 +57,14 @@ public class OverviewActivity extends AppCompatActivity {
         TextView test = findViewById(R.id.editTextTest);
 
         makePage();
+        makeSuchfilter();
 
         prev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(page_nr > -1){
-                    page_nr--;
-                    Cursor pageCursor = inventoryDB.rawQuery("SELECT * FROM " + InventoryTbl.TABLE_NAME + " limit " + page_nr*entry_amount + ", " + entry_amount, null);
-                    String test = "";
-                    while(pageCursor.moveToNext()){
-                        test += pageCursor.getString(0) + ";";
-                    }
-                    pageCursor.close();
-                    TextView testView = findViewById(R.id.editTextTest);
-                    testView.setText(test);
-
+                if(current_page > 0){
+                    current_page--;
+                    updatePage();
                 }
             }
         });
@@ -73,16 +72,9 @@ public class OverviewActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(page_nr < page_amount-1){
-                    page_nr++;
-                    Cursor pageCursor = inventoryDB.rawQuery("SELECT * FROM " + InventoryTbl.TABLE_NAME + " limit " + page_nr*entry_amount + ", " + entry_amount, null);
-                    String test = "";
-                    while(pageCursor.moveToNext()){
-                        test += pageCursor.getString(0) + ";";
-                    }
-                    pageCursor.close();
-                    TextView testView = findViewById(R.id.editTextTest);
-                    testView.setText(test);
+                if(current_page < page_amount-1){
+                    current_page++;
+                    updatePage();
                 }
             }
         });
@@ -94,13 +86,63 @@ public class OverviewActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    private void makeSuchfilter() {
+        EditText editSearch = findViewById(R.id.edtSearch);
+        editSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                updatePage();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+
+    private void updatePage(){
+        EditText editSearch = findViewById(R.id.edtSearch);
+        Cursor pageCursor;
+        if(editSearch.getText().toString().equals("")){
+            pageCursor = inventoryDB.rawQuery("SELECT * FROM " + InventoryTbl.TABLE_NAME + " limit " + current_page *entry_amount + ", " + entry_amount, null);
+        }else{
+            String text = editSearch.getText().toString();
+            text = "%" + text + "%";
+            pageCursor = inventoryDB.rawQuery("SELECT * FROM " + InventoryTbl.TABLE_NAME +
+                            " WHERE (" + InventoryTbl.Bezeichnung + " LIKE ? ) OR (" + InventoryTbl.Lagerort + " LIKE ? ) OR (" + InventoryTbl.Menge + " LIKE ? ) OR (" + InventoryTbl.EAN + " LIKE ? ) " +
+                            " limit " + current_page *entry_amount + ", " + entry_amount
+                    , new String[]{text, text, text, text});
+        }
+
+        entries.clear();
+        while(pageCursor.moveToNext()){
+            entries.add(new Eintrag(
+                    pageCursor.getString(0),
+                    pageCursor.getString(1),
+                    pageCursor.getString(2),
+                    pageCursor.getString(3),
+                    pageCursor.getString(4)
+            ));
+        }
+        pageCursor.close();
+        entryAdapter.notifyDataSetChanged();
+    }
+
     private void makePage() {
         Cursor amountCursor = inventoryDB.rawQuery(InventoryTbl.STMT_COUNT, null);
         amountCursor.moveToNext();
         int amount = amountCursor.getInt(0);
         amountCursor.close();
 
-        page_amount = ((double) amount/entry_amount % 1 == 0) ? (int) ((double) amount/entry_amount) : (int) Math.ceil((double) amount/entry_amount);
+        page_amount = (int) Math.ceil((double) amount/entry_amount);
+        updatePage();
     }
 
     /*
