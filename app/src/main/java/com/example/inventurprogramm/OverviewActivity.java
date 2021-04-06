@@ -31,7 +31,7 @@ public class OverviewActivity extends AppCompatActivity {
     private SQLiteDatabase inventoryDB;
     private int current_page = 0;
     private int page_amount = 0;
-    private int entry_amount = 3;
+    private int entry_amount = 10;
 
     private ListView entryListView;
     private List<Eintrag> entries = new ArrayList<>();
@@ -54,7 +54,6 @@ public class OverviewActivity extends AppCompatActivity {
         //Pagination
         Button prev = findViewById(R.id.buttonPrev);
         Button next = findViewById(R.id.buttonNext);
-        TextView test = findViewById(R.id.editTextTest);
 
         makePage();
         makeSuchfilter();
@@ -78,9 +77,6 @@ public class OverviewActivity extends AppCompatActivity {
                 }
             }
         });
-
-        //make table
-        //makeTable();
 
         //back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
