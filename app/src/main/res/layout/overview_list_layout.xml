@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -20,24 +21,38 @@
 
             <TextView
                 android:id="@+id/txt_Bezeichnung"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Michael Jacksons Play" />
+                android:layout_weight="0.5"
+                android:lines="1"
+                android:paddingLeft="5sp"
+                android:text="Michael Jacksons Play"
+                android:textColor="#000000"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/txt_Lagerort"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Ried im Innkreis" />
+                android:layout_weight="0.35"
+                android:lines="1"
+                android:paddingLeft="5sp"
+                android:paddingRight="5sp"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                tools:text="asdfasdfasdfasdfasdfaasdfasdfasdfsdf" />
 
             <TextView
                 android:id="@+id/txt_Menge"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="3" />
+                android:layout_weight="0.15"
+                android:lines="1"
+                android:paddingRight="5sp"
+                android:text="3"
+                android:textAlignment="textEnd"
+                android:textColor="#000000"
+                android:textSize="16sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -50,7 +65,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="7919239494" />
+                android:paddingLeft="5sp"
+                android:text="7919239494"
+                android:textColor="#D3000000"
+                android:textSize="13sp" />
 
         </LinearLayout>
 
