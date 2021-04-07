@@ -1,9 +1,11 @@
 package com.example.inventurprogramm;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -21,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.inventurprogramm.database.InventoryHelper;
 import com.example.inventurprogramm.database.InventoryTbl;
@@ -58,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonSpeichern;
     private TextView textViewStamm;
     private TextView textViewEingabe;
+
+    Intent myFileIntent;
+    String stammdatedPfad;
 
 
     private Boolean eanGefunden = false;
@@ -180,59 +186,42 @@ public class MainActivity extends AppCompatActivity {
                 System.exit(0);
                 return true;
             case R.id.subitemDatenEinlesen:
-                String filename = "pfade.txt";
-                String pfadEinlesen = "";
-                try {
-                    FileInputStream fis = openFileInput(filename);
-                    BufferedReader br = new BufferedReader(new InputStreamReader(fis));
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        String[] s = line.split(";");
-                        pfadEinlesen = s[0];
-                    }
-                    br.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    FileInputStream fis = openFileInput(pfadEinlesen);
-                    BufferedReader br = new BufferedReader(new InputStreamReader(fis));
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        String[] stammdatenArray = line.split(";");
-                        int id = 1;
-                        //mydatabase.execSQL("Insert INTO Stammdaten (id, ean, bezeichnung) Values( ?, ?, ?)", new Object[]{id, stammdatenArray[0], stammdatenArray[1]});
-
-
-                    }
-                    br.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
+                myFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                myFileIntent.setType("*/*");
+                startActivityForResult(myFileIntent, 10);
 
                 return true;
             case R.id.subitemDatenAusgeben:
                 //Code
-                String filename2 = "test4.txt";
+                String filename2 = "invCeDaten.txt";
                 File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filename2);
 
-                try {
-                    FileOutputStream fos = new FileOutputStream(file);
-                    PrintWriter out = new PrintWriter(new OutputStreamWriter(fos));
-                    out.println("test");
-                    out.flush();
-                    out.close();
-                    fos.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                SQLiteDatabase db = getApplicationContext().openOrCreateDatabase("inventory.db", Context.MODE_PRIVATE, null);
+                Cursor c = db.rawQuery("select * from inventory", null);
+                if (c.getCount() == 0) {
+                    Toast.makeText(getApplicationContext(), "Keine Daten gefunden!", Toast.LENGTH_LONG).show();
+
                 }
+                StringBuffer buffer = new StringBuffer();
+                while(c.moveToNext()) {
+                    buffer.append(c.getString(0) + ";" + c.getString(1) + ";" + c.getString(2) + ";" + c.getString(3));
+                    buffer.append("\n");
+                    try {
+                        FileOutputStream fos = new FileOutputStream(file);
+                        PrintWriter out = new PrintWriter(new OutputStreamWriter(fos));
+                        out.println(buffer.toString());
+                        out.flush();
+                        out.close();
+                        fos.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+
 
                 return true;
             case R.id.subitemPfadeAendern:
@@ -254,6 +243,19 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu, menu);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 10:
+                if (resultCode == RESULT_OK) {
+                    String path = data.getData().getPath(); //pfad
+                    stammdatedPfad = path;
+                }
+                break;
+        }
     }
 
 
