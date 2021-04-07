@@ -27,6 +27,11 @@ public class StammdatenTbl {
                     " (" + EAN + ", " + Bezeichnung + ", " + Menge + ", " + Lagerort + ")" +
                     " VALUES (?,?,?,?)";
 
+    public static final String STMT_INSERT_STAMM =
+            "INSERT INTO " + TABLE_NAME +
+                    " (" + EAN + ", " + Bezeichnung + ")" +
+                    " VALUES (?,?)";
+
     public static final String STMT_UPDATE =
             "UPDATE " + TABLE_NAME + " SET " +
                     EAN + " = ?, " +

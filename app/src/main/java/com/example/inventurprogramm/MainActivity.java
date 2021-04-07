@@ -2,15 +2,18 @@ package com.example.inventurprogramm;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
@@ -29,8 +32,6 @@ import com.example.inventurprogramm.database.InventoryHelper;
 import com.example.inventurprogramm.database.InventoryTbl;
 import com.example.inventurprogramm.database.StammdatenHelper;
 import com.example.inventurprogramm.database.StammdatenTbl;
-import com.example.inventurprogramm.model.Eintrag;
-import com.example.inventurprogramm.model.TempEintraegeFactory;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.BufferedReader;
@@ -42,8 +43,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -63,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView textViewEingabe;
 
     Intent myFileIntent;
-    String stammdatedPfad;
+    String stammdatenPfad;
 
 
     private Boolean eanGefunden = false;
@@ -164,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -189,7 +189,12 @@ public class MainActivity extends AppCompatActivity {
                 myFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
                 myFileIntent.setType("*/*");
                 startActivityForResult(myFileIntent, 10);
+                if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 123);
+                } else {
 
+                    stammdatenEinlesen();
+                }
                 return true;
             case R.id.subitemDatenAusgeben:
                 //Code
@@ -237,6 +242,25 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void stammdatenEinlesen() {
+        try {
+            File file = new File(stammdatenPfad);
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                String[] stammdatenArray = line.split(";");
+                stammdatenDB.execSQL(StammdatenTbl.STMT_INSERT_STAMM, new Object[]{stammdatenArray[0], stammdatenArray[1]});
+            }
+
+            br.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -252,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
             case 10:
                 if (resultCode == RESULT_OK) {
                     String path = data.getData().getPath(); //pfad
-                    stammdatedPfad = path;
+                    stammdatenPfad = path;
                 }
                 break;
         }
@@ -310,5 +334,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 123) {
+            if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+            } else {
+                stammdatenEinlesen();
+            }
+        }
+    }
 }
