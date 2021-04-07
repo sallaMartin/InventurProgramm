@@ -10,8 +10,10 @@
     android:paddingRight="20sp"
     android:paddingBottom="10sp"
     android:weightSum="16"
+    android:id="@+id/mainLayout"
     app:titleTextColor="#ffffff"
     tools:context=".MainActivity">
+
 
     <LinearLayout
         android:layout_width="match_parent"

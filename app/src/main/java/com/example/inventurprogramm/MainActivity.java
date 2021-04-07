@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -25,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +34,7 @@ import com.example.inventurprogramm.database.InventoryHelper;
 import com.example.inventurprogramm.database.InventoryTbl;
 import com.example.inventurprogramm.database.StammdatenHelper;
 import com.example.inventurprogramm.database.StammdatenTbl;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.BufferedReader;
@@ -61,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView textViewStamm;
     private TextView textViewEingabe;
 
+
+    private LinearLayout mainLayout;
+
     private Intent myFileIntent;
     private String stammdatenPfad = "";
 
@@ -79,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //UI-Komponenten initalisieren
+        mainLayout = findViewById(R.id.mainLayout);
+
         plainTextEan = findViewById(R.id.plainTextEanView);
         textViewEanVergleich = findViewById(R.id.textViewEanVergleich);
 
@@ -89,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         buttonSpeichern = findViewById(R.id.buttonSpeichernView);
         textViewStamm = findViewById(R.id.textViewStammView);
         textViewEingabe = findViewById(R.id.textViewEingabeView);
+
 
         //fortlaufenden EAN-Vergleich initalisieren
         vergleichEAN();
@@ -119,6 +128,13 @@ public class MainActivity extends AppCompatActivity {
                     plainTextLagerort.getEditText().setText("");
                     plainTextMenge.getEditText().setText("");
 
+                    Snackbar snackbar = Snackbar.make(mainLayout, "Gespeichert!", Snackbar.LENGTH_LONG);
+                    View sbView = snackbar.getView();
+                    int myColor = getResources().getColor(R.color.colorPrimary);
+                    sbView.setBackgroundColor(myColor);
+                    snackbar.show();
+
+
                     eanGefunden = false;
                 } else {
 
@@ -127,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
                     final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
                     final View customLayout = getLayoutInflater().inflate(R.layout.custom_alertdialog,null);
                     alertDialogBuilder.setView(customLayout);
-                    alertDialogBuilder.setTitle("Speichern obwohl EAN falsch ist ");
                     alertDialogBuilder.setCancelable(false);
 
 
@@ -136,22 +151,50 @@ public class MainActivity extends AppCompatActivity {
                     alertDialogBuilder.setPositiveButton("JA", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            EditText alertDialog = customLayout.findViewById(R.id.alertDialog);
+
+                            TextInputLayout alertDialog = customLayout.findViewById(R.id.alertDialog);
                             String tempEAN = plainTextEan.getEditText().getText().toString();
                             String tempMenge = plainTextMenge.getEditText().getText().toString();
                             String tempLagerort = plainTextLagerort.getEditText().getText().toString();
-                            String tempBezeichnung= alertDialog.getText().toString();
+                            String tempBezeichnung= alertDialog.getEditText().getText().toString();
 
-                            inventoryDB.execSQL(InventoryTbl.STMT_INSERT, new Object[]{tempEAN, tempBezeichnung, tempMenge, tempLagerort});
-                            plainTextEan.getEditText().setText("");
-                            plainTextLagerort.getEditText().setText("");
-                            plainTextMenge.getEditText().setText("");
+                            if(tempBezeichnung.equals("")) {
+                                Snackbar snackbar = Snackbar.make(mainLayout, "Bitte Bezeichnung eingeben!", Snackbar.LENGTH_LONG);
+                                View sbView = snackbar.getView();
+                                int myColor = getResources().getColor(R.color.colorPrimary);
+                                sbView.setBackgroundColor(myColor);
+                                snackbar.show();
+                            } else {
+                                inventoryDB.execSQL(InventoryTbl.STMT_INSERT, new Object[]{tempEAN, tempBezeichnung, tempMenge, tempLagerort});
+                                plainTextEan.getEditText().setText("");
+                                plainTextLagerort.getEditText().setText("");
+                                plainTextMenge.getEditText().setText("");
+
+
+                                Snackbar snackbar = Snackbar.make(mainLayout, "Gespeichert!", Snackbar.LENGTH_LONG);
+                                View sbView = snackbar.getView();
+                                int myColor = getResources().getColor(R.color.colorPrimary);
+                                sbView.setBackgroundColor(myColor);
+                                snackbar.show();
+                            }
+
+
+
                         }
                     });
 
                     alertDialogBuilder.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+
+
+                            Snackbar snackbar = Snackbar.make(mainLayout, "Abgebrochen!", Snackbar.LENGTH_LONG);
+                            View sbView = snackbar.getView();
+                            int myColor = getResources().getColor(R.color.colorAccent);
+                            sbView.setBackgroundColor(myColor);
+                            snackbar.show();
+
+
 
                         }
                     });
@@ -163,6 +206,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+
 
     }
 
@@ -226,26 +271,47 @@ public class MainActivity extends AppCompatActivity {
 
         Cursor c = inventoryDB.rawQuery(InventoryTbl.STMT_SELECT, null);
         if (c.getCount() == 0) {
-            Toast.makeText(getApplicationContext(), "Keine Daten gefunden!", Toast.LENGTH_LONG).show();
+            Snackbar snackbar = Snackbar.make(mainLayout, "Keine Daten in der Datenbank gefunden!", Snackbar.LENGTH_LONG);
+            View sbView = snackbar.getView();
+            int myColor = getResources().getColor(R.color.colorAccent);
+            sbView.setBackgroundColor(myColor);
+            snackbar.show();
 
-        }
-        StringBuffer buffer = new StringBuffer();
-        while(c.moveToNext()) {
-            buffer.append(c.getString(0) + ";" + c.getString(1) + ";" + c.getString(2) + ";" + c.getString(3));
-            buffer.append("\n");
-            try {
-                FileOutputStream fos = new FileOutputStream(file);
-                PrintWriter out = new PrintWriter(new OutputStreamWriter(fos));
-                out.println(buffer.toString());
-                out.flush();
-                out.close();
-                fos.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+        } else {
+            StringBuffer buffer = new StringBuffer();
+            while(c.moveToNext()) {
+                buffer.append(c.getString(0) + ";" + c.getString(1) + ";" + c.getString(2) + ";" + c.getString(3));
+                buffer.append("\n");
+                try {
+                    FileOutputStream fos = new FileOutputStream(file);
+                    PrintWriter out = new PrintWriter(new OutputStreamWriter(fos));
+                    out.println(buffer.toString());
+                    out.flush();
+                    out.close();
+                    fos.close();
+                    Snackbar snackbar = Snackbar.make(mainLayout, "Daten gespeichert!", Snackbar.LENGTH_LONG);
+                    View sbView = snackbar.getView();
+                    int myColor = getResources().getColor(R.color.colorPrimary);
+                    sbView.setBackgroundColor(myColor);
+                    snackbar.show();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                    Snackbar snackbar = Snackbar.make(mainLayout, "Es ist ein Fehler aufgetreten! Fehlercode: " + e.toString() , Snackbar.LENGTH_LONG);
+                    View sbView = snackbar.getView();
+                    int myColor = getResources().getColor(R.color.colorAccent);
+                    sbView.setBackgroundColor(myColor);
+                    snackbar.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Snackbar snackbar = Snackbar.make(mainLayout, "Es ist ein Fehler aufgetreten! Fehlercode: " + e.toString() , Snackbar.LENGTH_LONG);
+                    View sbView = snackbar.getView();
+                    int myColor = getResources().getColor(R.color.colorAccent);
+                    sbView.setBackgroundColor(myColor);
+                    snackbar.show();
+                }
             }
         }
+
     }
 
     private void stammdatenEinlesen() {
@@ -280,13 +346,29 @@ public class MainActivity extends AppCompatActivity {
                         while ((line = br.readLine()) != null) {
                             String[] stammdatenArray = line.split(";");
                             stammdatenDB.execSQL(StammdatenTbl.STMT_INSERT_STAMM, new Object[]{stammdatenArray[0], stammdatenArray[1]});
+                            Snackbar snackbar = Snackbar.make(mainLayout, "Daten in der Datenbank gespeichert!" , Snackbar.LENGTH_LONG);
+                            View sbView = snackbar.getView();
+                            int myColor = getResources().getColor(R.color.colorPrimary);
+                            sbView.setBackgroundColor(myColor);
+                            snackbar.show();
                         }
 
                         br.close();
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
+                        Snackbar snackbar = Snackbar.make(mainLayout, "Es ist ein Fehler aufgetreten! Fehlercode: " + e.toString() , Snackbar.LENGTH_LONG);
+                        View sbView = snackbar.getView();
+                        int myColor = getResources().getColor(R.color.colorAccent);
+                        sbView.setBackgroundColor(myColor);
+                        snackbar.show();
                     } catch (IOException e) {
                         e.printStackTrace();
+                        Snackbar snackbar = Snackbar.make(mainLayout, "Es ist ein Fehler aufgetreten! Fehlercode: " + e.toString() , Snackbar.LENGTH_LONG);
+                        View sbView = snackbar.getView();
+                        int myColor = getResources().getColor(R.color.colorAccent);
+                        sbView.setBackgroundColor(myColor);
+                        snackbar.show();
+
                     }
                 }
                 break;
