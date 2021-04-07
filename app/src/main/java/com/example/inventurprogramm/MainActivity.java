@@ -87,8 +87,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         buttonSpeichern = findViewById(R.id.buttonSpeichernView);
-        textViewStamm = findViewById(R.id.textViewStammView);
-        textViewEingabe = findViewById(R.id.textViewEingabeView);
+        textViewStamm = findViewById(R.id.txtStamm);
+        textViewEingabe = findViewById(R.id.txtInventory);
 
         //fortlaufenden EAN-Vergleich initalisieren
         vergleichEAN();
@@ -99,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
         StammdatenHelper stammdatenHelper = new StammdatenHelper(this);
         stammdatenDB = stammdatenHelper.getReadableDatabase();
 
+        //Stamm und Eingabae einholen
+        anzahlQuery();
 
         buttonSpeichern.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
                     plainTextEan.getEditText().setText("");
                     plainTextLagerort.getEditText().setText("");
                     plainTextMenge.getEditText().setText("");
+                    anzahlQuery();
 
                     eanGefunden = false;
                 } else {
@@ -146,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
                             plainTextEan.getEditText().setText("");
                             plainTextLagerort.getEditText().setText("");
                             plainTextMenge.getEditText().setText("");
+                            anzahlQuery();
                         }
                     });
 
@@ -164,6 +168,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void anzahlQuery() {
+        Cursor countCursor = inventoryDB.rawQuery(InventoryTbl.STMT_COUNT, null);
+        countCursor.moveToNext();
+        int count = countCursor.getInt(0);
+        countCursor.close();
+        textViewEingabe.setText(""+count);
+
+        countCursor = stammdatenDB.rawQuery(StammdatenTbl.STMT_COUNT, null);
+        countCursor.moveToNext();
+        count = countCursor.getInt(0);
+        countCursor.close();
+        textViewStamm.setText(""+count);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -288,6 +306,7 @@ public class MainActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    anzahlQuery();
                 }
                 break;
         }

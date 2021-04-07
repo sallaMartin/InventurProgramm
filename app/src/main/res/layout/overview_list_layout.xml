@@ -72,6 +72,7 @@
                 android:layout_weight="1"
                 android:text="7919239494"
                 android:textColor="#D3000000"
+                android:textStyle="italic"
                 android:textSize="13sp" />
 
         </LinearLayout>

@@ -54,7 +54,7 @@
         android:background="@drawable/customrectangle"
         android:orientation="horizontal"
         android:paddingLeft="5sp"
-        android:paddingTop="18sp"
+        android:paddingTop="17sp"
         android:paddingRight="5sp"
         android:paddingBottom="5sp">
 
@@ -65,6 +65,7 @@
             android:layout_weight="0.5"
             android:lines="1"
             android:text="Bezeichnung"
+            android:textStyle="bold"
             android:textColor="@color/colorAccent2"
             android:textSize="18sp" />
 
@@ -76,6 +77,7 @@
             android:text="Lagerort"
             android:paddingLeft="5sp"
             android:paddingRight="5sp"
+            android:textStyle="bold"
             android:textColor="@color/colorAccent2"
             android:textSize="18sp"
         />
@@ -86,6 +88,7 @@
             android:layout_weight="0.15"
             android:lines="1"
             android:text="Menge"
+            android:textStyle="bold"
             android:textAlignment="textEnd"
             android:textColor="@color/colorAccent2"
             android:textSize="18sp" />
@@ -104,21 +107,39 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="11">
 
         <Button
             android:id="@+id/buttonPrev"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Prev" />
+            android:layout_weight="4"
+            android:gravity="center"
+            app:icon="@drawable/baseline_arrow_back_ios_24"
+            app:iconGravity="textStart"
+           android:text="Zurück" />
+
+        <TextView
+            android:id="@+id/txtPage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:text="1 / 2"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
 
         <Button
             android:id="@+id/buttonNext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Next" />
+            android:layout_weight="4"
+            android:gravity="center"
+            app:icon="@drawable/baseline_arrow_forward_ios_24"
+            app:iconGravity="textEnd"
+            android:text="Weiter" />
 
     </LinearLayout>
 
