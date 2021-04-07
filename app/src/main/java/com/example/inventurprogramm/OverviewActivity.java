@@ -34,6 +34,8 @@ public class OverviewActivity extends AppCompatActivity {
     private int page_amount = 0;
     private int entry_amount = 10;
 
+    private TextView txtPage;
+
     private ListView entryListView;
     private List<Eintrag> entries = new ArrayList<>();
     private EintragAdapter entryAdapter;
@@ -47,6 +49,8 @@ public class OverviewActivity extends AppCompatActivity {
         InventoryHelper inventoryHelper = new InventoryHelper(this);
         inventoryDB = inventoryHelper.getReadableDatabase();
 
+        txtPage = findViewById(R.id.txtPage);
+
         //Liste initalisieren;
         entryListView = findViewById(R.id.list_entry);
         entryAdapter = new EintragAdapter(this, R.layout.overview_list_layout, entries);
@@ -56,7 +60,7 @@ public class OverviewActivity extends AppCompatActivity {
         Button prev = findViewById(R.id.buttonPrev);
         Button next = findViewById(R.id.buttonNext);
 
-        makePage();
+        updatePage();
         makeSuchfilter();
 
         prev.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +97,7 @@ public class OverviewActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                current_page = 0;
                 updatePage();
             }
 
@@ -106,9 +111,17 @@ public class OverviewActivity extends AppCompatActivity {
 
     private void updatePage(){
         TextInputLayout editSearch = findViewById(R.id.edtSearch);
+
         Cursor pageCursor;
+        Cursor amountCursor;
         if(editSearch.getEditText().getText().toString().equals("")){
             pageCursor = inventoryDB.rawQuery("SELECT * FROM " + InventoryTbl.TABLE_NAME + " limit " + current_page *entry_amount + ", " + entry_amount, null);
+            amountCursor = inventoryDB.rawQuery(InventoryTbl.STMT_COUNT, null);
+            amountCursor.moveToNext();
+            int amount = amountCursor.getInt(0);
+            amountCursor.close();
+
+            page_amount = (int) Math.ceil((double) amount/entry_amount);
         }else{
             String text = editSearch.getEditText().getText().toString();
             text = "%" + text + "%";
@@ -116,7 +129,16 @@ public class OverviewActivity extends AppCompatActivity {
                             " WHERE (" + InventoryTbl.Bezeichnung + " LIKE ? ) OR (" + InventoryTbl.Lagerort + " LIKE ? ) OR (" + InventoryTbl.Menge + " LIKE ? ) OR (" + InventoryTbl.EAN + " LIKE ? ) " +
                             " limit " + current_page *entry_amount + ", " + entry_amount
                     , new String[]{text, text, text, text});
+            amountCursor = inventoryDB.rawQuery("SELECT COUNT(*) FROM " + InventoryTbl.TABLE_NAME +
+                            " WHERE (" + InventoryTbl.Bezeichnung + " LIKE ? ) OR (" + InventoryTbl.Lagerort + " LIKE ? ) OR (" + InventoryTbl.Menge + " LIKE ? ) OR (" + InventoryTbl.EAN + " LIKE ? ) "
+                    , new String[]{text, text, text, text});
+            amountCursor.moveToNext();
+            int amount = amountCursor.getInt(0);
+            amountCursor.close();
+
+            page_amount = (int) Math.ceil((double) amount/entry_amount);
         }
+        txtPage.setText("" + ((int) current_page + 1) + " / " + page_amount);
 
         entries.clear();
         while(pageCursor.moveToNext()){
@@ -130,16 +152,6 @@ public class OverviewActivity extends AppCompatActivity {
         }
         pageCursor.close();
         entryAdapter.notifyDataSetChanged();
-    }
-
-    private void makePage() {
-        Cursor amountCursor = inventoryDB.rawQuery(InventoryTbl.STMT_COUNT, null);
-        amountCursor.moveToNext();
-        int amount = amountCursor.getInt(0);
-        amountCursor.close();
-
-        page_amount = (int) Math.ceil((double) amount/entry_amount);
-        updatePage();
     }
 
     /*
