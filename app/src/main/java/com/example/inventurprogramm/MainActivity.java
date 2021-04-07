@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView textViewEingabe;
 
     Intent myFileIntent;
-    String stammdatenPfad;
+    String stammdatenPfad = "";
 
 
     private Boolean eanGefunden = false;
@@ -186,13 +186,10 @@ public class MainActivity extends AppCompatActivity {
                 System.exit(0);
                 return true;
             case R.id.subitemDatenEinlesen:
-                myFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                myFileIntent.setType("*/*");
-                startActivityForResult(myFileIntent, 10);
+
                 if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 123);
                 } else {
-
                     stammdatenEinlesen();
                 }
                 return true;
@@ -243,22 +240,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void stammdatenEinlesen() {
-        try {
-            File file = new File(stammdatenPfad);
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-            String line;
-
-            while ((line = br.readLine()) != null) {
-                String[] stammdatenArray = line.split(";");
-                stammdatenDB.execSQL(StammdatenTbl.STMT_INSERT_STAMM, new Object[]{stammdatenArray[0], stammdatenArray[1]});
-            }
-
-            br.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        myFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        myFileIntent.setType("*/*");
+        startActivityForResult(myFileIntent, 10);
     }
 
 
@@ -277,6 +261,24 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     String path = data.getData().getPath(); //pfad
                     stammdatenPfad = path;
+                    String tempPath = (stammdatenPfad.split(":"))[1];
+                    try {
+
+                        File file = new File(tempPath);
+                        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+                        String line;
+
+                        while ((line = br.readLine()) != null) {
+                            String[] stammdatenArray = line.split(";");
+                            stammdatenDB.execSQL(StammdatenTbl.STMT_INSERT_STAMM, new Object[]{stammdatenArray[0], stammdatenArray[1]});
+                        }
+
+                        br.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 break;
         }
