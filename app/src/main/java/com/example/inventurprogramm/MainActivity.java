@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.inventurprogramm.database.InventoryHelper;
 import com.example.inventurprogramm.database.InventoryTbl;
@@ -194,7 +196,19 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
+
+
+
+                String fileName = "";
+
+
+
+
+
+                /*
                 try {
+
                     FileInputStream fis = openFileInput(pfadEinlesen);
                     BufferedReader br = new BufferedReader(new InputStreamReader(fis));
                     String line;
@@ -211,26 +225,42 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                 */
+
 
 
                 return true;
             case R.id.subitemDatenAusgeben:
                 //Code
-                String filename2 = "test4.txt";
+                String filename2 = "invCeDaten.txt";
                 File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filename2);
 
-                try {
-                    FileOutputStream fos = new FileOutputStream(file);
-                    PrintWriter out = new PrintWriter(new OutputStreamWriter(fos));
-                    out.println("test");
-                    out.flush();
-                    out.close();
-                    fos.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                SQLiteDatabase db = getApplicationContext().openOrCreateDatabase("inventory.db", Context.MODE_PRIVATE, null);
+                Cursor c = db.rawQuery("select * from inventory", null);
+                if (c.getCount() == 0) {
+                    Toast.makeText(getApplicationContext(), "Keine Daten gefunden!", Toast.LENGTH_LONG).show();
+
                 }
+                StringBuffer buffer = new StringBuffer();
+                while(c.moveToNext()) {
+                    buffer.append(c.getString(0) + ";" + c.getString(1) + ";" + c.getString(2) + ";" + c.getString(3));
+                    buffer.append("\n");
+                    try {
+                        FileOutputStream fos = new FileOutputStream(file);
+                        PrintWriter out = new PrintWriter(new OutputStreamWriter(fos));
+                        out.println(buffer.toString());
+                        out.flush();
+                        out.close();
+                        fos.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+
 
                 return true;
             case R.id.subitemPfadeAendern:
