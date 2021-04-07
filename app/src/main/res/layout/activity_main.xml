@@ -214,7 +214,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textViewStammView"
+                android:id="@+id/txtStamm"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -247,7 +247,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textViewEingabeView"
+                android:id="@+id/txtInventory"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

@@ -4,6 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/customborder"
+    android:paddingLeft="5sp"
+    android:paddingRight="5sp"
+    android:paddingBottom="5sp"
+    android:paddingTop="5sp"
+    android:layout_marginBottom="20sp"
     android:orientation="vertical">
 
 
@@ -25,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:lines="1"
-                android:paddingLeft="5sp"
+
                 android:text="Michael Jacksons Play"
                 android:textColor="#000000"
                 android:textSize="16sp" />
@@ -48,7 +54,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.15"
                 android:lines="1"
-                android:paddingRight="5sp"
                 android:text="3"
                 android:textAlignment="textEnd"
                 android:textColor="#000000"
@@ -65,9 +70,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingLeft="5sp"
                 android:text="7919239494"
                 android:textColor="#D3000000"
+                android:textStyle="italic"
                 android:textSize="13sp" />
 
         </LinearLayout>

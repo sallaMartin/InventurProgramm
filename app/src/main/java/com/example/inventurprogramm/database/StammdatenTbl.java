@@ -50,9 +50,9 @@ public class StammdatenTbl {
     public static final String STMT_SELECT_WHERE_EAN =
             "SELECT * FROM " + TABLE_NAME + " WHERE " + EAN + " = ?" ;
 
-    public static final String PSTMT_COUNT =
+    public static final String STMT_COUNT =
             "SELECT COUNT(*) FROM " + TABLE_NAME;
 
-    public static final String PSTMT_SELECT_ID =
+    public static final String STMT_SELECT_ID =
             "SELECT * FROM " + TABLE_NAME + " WHERE " + Inventory_ID + " = ?";
 }
