@@ -51,10 +51,12 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText plainTextMenge;
     private EditText plainTextLagerort;
+    private EditText alertBezeichnung;
 
     private Button buttonSpeichern;
     private TextView textViewStamm;
     private TextView textViewEingabe;
+
 
     private Boolean eanGefunden = false;
 
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
         plainTextMenge = findViewById(R.id.plainTextMengeView);
         plainTextLagerort = findViewById(R.id.plainTextLagerortView);
+
 
         buttonSpeichern = findViewById(R.id.buttonSpeichernView);
         textViewStamm = findViewById(R.id.textViewStammView);
@@ -110,17 +113,24 @@ public class MainActivity extends AppCompatActivity {
                 } else {
 
                     Log.e("Wrong", "Der Ean ist zukurz");
+
                     final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
-                    alertDialogBuilder.setTitle("Wollen Sie Speichern " + "\n" + "Ean ist zukurz");
+                    final View customLayout = getLayoutInflater().inflate(R.layout.custom_alertdialog,null);
+                    alertDialogBuilder.setView(customLayout);
+                    alertDialogBuilder.setTitle("Speichern obwohl EAN falsch ist ");
                     alertDialogBuilder.setCancelable(false);
+
+
+
 
                     alertDialogBuilder.setPositiveButton("JA", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            EditText alertDialog = customLayout.findViewById(R.id.alertDialog);
                             String tempEAN = plainTextEan.getText().toString();
                             String tempMenge = plainTextMenge.getText().toString();
                             String tempLagerort = plainTextLagerort.getText().toString();
-                            String tempBezeichnung = "";
+                            String tempBezeichnung= alertDialog.getText().toString();
 
                             inventoryDB.execSQL(InventoryTbl.STMT_INSERT, new Object[]{tempEAN, tempBezeichnung, tempMenge, tempLagerort});
                             plainTextEan.setText("");
@@ -137,7 +147,9 @@ public class MainActivity extends AppCompatActivity {
                     });
 
 
+                    AlertDialog dialog = alertDialogBuilder.create();
                     alertDialogBuilder.show();
+
                 }
             }
         });
