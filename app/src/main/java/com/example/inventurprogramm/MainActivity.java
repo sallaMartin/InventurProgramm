@@ -204,10 +204,12 @@ public class MainActivity extends AppCompatActivity {
                     inventoryAuslesen();
                 }
                 return true;
+                /*
             case R.id.subitemPfadeAendern:
                 Intent intentpfadAendernAcitivity = new Intent(getBaseContext(), ChangePathActivity.class);
                 startActivity(intentpfadAendernAcitivity);
                 return true;
+                 */
             case R.id.subitemUebersicht:
                 Intent intentUebersichtActivity = new Intent(getBaseContext(), OverviewActivity.class);
                 startActivity(intentUebersichtActivity);
