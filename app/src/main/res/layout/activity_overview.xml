@@ -5,43 +5,100 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradiant"
+    android:orientation="vertical"
     android:paddingLeft="10dp"
     android:paddingTop="10dp"
     android:paddingRight="10dp"
     android:paddingBottom="10dp"
-    android:orientation="vertical"
     tools:context=".OverviewActivity">
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edtSearch"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Suche">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:shadowColor="#FFFFFF" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <!--
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_weight="0"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:text="@string/labelSuche">
+            </TextView>
+
+            <EditText
+                android:id="@+id/edtSearch"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:paddingLeft="10dp">
+            </EditText>
+            -->
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0"
+        android:layout_marginTop="15sp"
+        android:layout_marginBottom="7sp"
+        android:background="@drawable/customrectangle"
         android:orientation="horizontal"
-        android:paddingBottom="10dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_weight="0"
-            android:layout_height="wrap_content"
-            android:textSize="14dp"
-            android:text="@string/labelSuche">
-        </TextView>
+        android:paddingLeft="5sp"
+        android:paddingTop="18sp"
+        android:paddingRight="5sp"
+        android:paddingBottom="5sp">
 
-        <EditText
-            android:id="@+id/edtSearch"
-            android:layout_width="wrap_content"
-            android:layout_weight="1"
+
+        <TextView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="14dp"
-            android:paddingLeft="10dp">
-        </EditText>
+            android:layout_weight="0.5"
+            android:lines="1"
+            android:text="Bezeichnung"
+            android:textColor="@color/colorAccent2"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.35"
+            android:lines="1"
+            android:text="Lagerort"
+            android:paddingLeft="5sp"
+            android:paddingRight="5sp"
+            android:textColor="@color/colorAccent2"
+            android:textSize="18sp"
+        />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.15"
+            android:lines="1"
+            android:text="Menge"
+            android:textAlignment="textEnd"
+            android:textColor="@color/colorAccent2"
+            android:textSize="18sp" />
     </LinearLayout>
+
 
     <ListView
         android:id="@+id/list_entry"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
+        android:layout_weight="1"
+        android:divider="@null"
+        android:dividerHeight="5dp" />
 
 
     <LinearLayout

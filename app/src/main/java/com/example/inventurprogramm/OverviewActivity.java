@@ -23,6 +23,7 @@ import com.example.inventurprogramm.database.InventoryHelper;
 import com.example.inventurprogramm.database.InventoryTbl;
 import com.example.inventurprogramm.model.Eintrag;
 import com.example.inventurprogramm.model.EintragAdapter;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,8 +84,8 @@ public class OverviewActivity extends AppCompatActivity {
     }
 
     private void makeSuchfilter() {
-        EditText editSearch = findViewById(R.id.edtSearch);
-        editSearch.addTextChangedListener(new TextWatcher() {
+        TextInputLayout editSearch = findViewById(R.id.edtSearch);
+        editSearch.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -104,12 +105,12 @@ public class OverviewActivity extends AppCompatActivity {
 
 
     private void updatePage(){
-        EditText editSearch = findViewById(R.id.edtSearch);
+        TextInputLayout editSearch = findViewById(R.id.edtSearch);
         Cursor pageCursor;
-        if(editSearch.getText().toString().equals("")){
+        if(editSearch.getEditText().getText().toString().equals("")){
             pageCursor = inventoryDB.rawQuery("SELECT * FROM " + InventoryTbl.TABLE_NAME + " limit " + current_page *entry_amount + ", " + entry_amount, null);
         }else{
-            String text = editSearch.getText().toString();
+            String text = editSearch.getEditText().getText().toString();
             text = "%" + text + "%";
             pageCursor = inventoryDB.rawQuery("SELECT * FROM " + InventoryTbl.TABLE_NAME +
                             " WHERE (" + InventoryTbl.Bezeichnung + " LIKE ? ) OR (" + InventoryTbl.Lagerort + " LIKE ? ) OR (" + InventoryTbl.Menge + " LIKE ? ) OR (" + InventoryTbl.EAN + " LIKE ? ) " +
