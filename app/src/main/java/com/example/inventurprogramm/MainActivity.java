@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
@@ -27,6 +28,7 @@ import com.example.inventurprogramm.database.StammdatenHelper;
 import com.example.inventurprogramm.database.StammdatenTbl;
 import com.example.inventurprogramm.model.Eintrag;
 import com.example.inventurprogramm.model.TempEintraegeFactory;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -46,11 +48,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int DB_VERSION = 1;
 
     //UI-Komponenten
-    private EditText plainTextEan;
+    private TextInputLayout plainTextEan;
     private TextView textViewEanVergleich;
 
-    private EditText plainTextMenge;
-    private EditText plainTextLagerort;
+    private TextInputLayout  plainTextMenge;
+    private TextInputLayout  plainTextLagerort;
     private EditText alertBezeichnung;
 
     private Button buttonSpeichern;
@@ -95,9 +97,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (eanGefunden) {
-                    String tempEAN = plainTextEan.getText().toString();
-                    String tempMenge = plainTextMenge.getText().toString();
-                    String tempLagerort = plainTextLagerort.getText().toString();
+                    String tempEAN = plainTextEan.getEditText().getText().toString();
+                    String tempMenge = plainTextMenge.getEditText().getText().toString();
+                    String tempLagerort = plainTextLagerort.getEditText().getText().toString();
 
                     Cursor eintragCursor = stammdatenDB.rawQuery(StammdatenTbl.STMT_SELECT_WHERE_EAN, new String[]{tempEAN});
                     eintragCursor.moveToNext();
@@ -105,9 +107,9 @@ public class MainActivity extends AppCompatActivity {
                     eintragCursor.close();
 
                     inventoryDB.execSQL(InventoryTbl.STMT_INSERT, new Object[]{tempEAN, tempBezeichnung, tempMenge, tempLagerort});
-                    plainTextEan.setText("");
-                    plainTextLagerort.setText("");
-                    plainTextMenge.setText("");
+                    plainTextEan.getEditText().setText("");
+                    plainTextLagerort.getEditText().setText("");
+                    plainTextMenge.getEditText().setText("");
 
                     eanGefunden = false;
                 } else {
@@ -127,15 +129,15 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             EditText alertDialog = customLayout.findViewById(R.id.alertDialog);
-                            String tempEAN = plainTextEan.getText().toString();
-                            String tempMenge = plainTextMenge.getText().toString();
-                            String tempLagerort = plainTextLagerort.getText().toString();
+                            String tempEAN = plainTextEan.getEditText().getText().toString();
+                            String tempMenge = plainTextMenge.getEditText().getText().toString();
+                            String tempLagerort = plainTextLagerort.getEditText().getText().toString();
                             String tempBezeichnung= alertDialog.getText().toString();
 
                             inventoryDB.execSQL(InventoryTbl.STMT_INSERT, new Object[]{tempEAN, tempBezeichnung, tempMenge, tempLagerort});
-                            plainTextEan.setText("");
-                            plainTextLagerort.setText("");
-                            plainTextMenge.setText("");
+                            plainTextEan.getEditText().setText("");
+                            plainTextLagerort.getEditText().setText("");
+                            plainTextMenge.getEditText().setText("");
                         }
                     });
 
@@ -256,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void vergleichEAN() {
-        plainTextEan.addTextChangedListener(new TextWatcher() {
+        plainTextEan.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -265,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
                 if (s.length() > 7 && s.length() < 14) {
-                    String tempEAN = plainTextEan.getText().toString();
+                    String tempEAN = plainTextEan.getEditText().getText().toString();
                     Cursor eanCursor = stammdatenDB.rawQuery(StammdatenTbl.STMT_SELECT_EAN, null);
 
                     while (eanCursor != null && eanCursor.moveToNext()) {
@@ -285,8 +287,8 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         } else {
                             textViewEanVergleich.setText("Der EAN wurde nicht gefunden");
-                            plainTextLagerort.setText("");
-                            plainTextMenge.setText("");
+                            plainTextLagerort.getEditText().setText("");
+                            plainTextMenge.getEditText().setText("");
 
                             eanGefunden = false;
                         }
@@ -295,8 +297,8 @@ public class MainActivity extends AppCompatActivity {
                     eanCursor.close();
                 } else {
                     textViewEanVergleich.setText("Ean hat nicht die richtige Länge");
-                    plainTextLagerort.setText("");
-                    plainTextMenge.setText("");
+                    plainTextLagerort.getEditText().setText("");
+                    plainTextMenge.getEditText().setText("");
                 }
             }
 
