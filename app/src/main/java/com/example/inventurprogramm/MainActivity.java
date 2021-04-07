@@ -199,14 +199,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-                String fileName = "";
-
-
-
-
-
-                /*
                 try {
 
                     FileInputStream fis = openFileInput(pfadEinlesen);
@@ -225,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                 */
+
 
 
 
