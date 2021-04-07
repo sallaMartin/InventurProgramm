@@ -2,15 +2,18 @@ package com.example.inventurprogramm;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
@@ -29,8 +32,6 @@ import com.example.inventurprogramm.database.InventoryHelper;
 import com.example.inventurprogramm.database.InventoryTbl;
 import com.example.inventurprogramm.database.StammdatenHelper;
 import com.example.inventurprogramm.database.StammdatenTbl;
-import com.example.inventurprogramm.model.Eintrag;
-import com.example.inventurprogramm.model.TempEintraegeFactory;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.BufferedReader;
@@ -42,8 +43,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -62,8 +61,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView textViewStamm;
     private TextView textViewEingabe;
 
-    Intent myFileIntent;
-    String stammdatedPfad;
+    private Intent myFileIntent;
+    private String stammdatenPfad = "";
+
+    private int CODE_READ_EXTERNAL_FILE = 901;
+    private int CODE_WRITE_EXTERNAL_FILE = 902;
 
 
     private Boolean eanGefunden = false;
@@ -164,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -186,48 +189,27 @@ public class MainActivity extends AppCompatActivity {
                 System.exit(0);
                 return true;
             case R.id.subitemDatenEinlesen:
-                myFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                myFileIntent.setType("*/*");
-                startActivityForResult(myFileIntent, 10);
 
+                if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, CODE_READ_EXTERNAL_FILE);
+                } else {
+                    stammdatenEinlesen();
+                }
                 return true;
             case R.id.subitemDatenAusgeben:
-                //Code
-                String filename2 = "invCeDaten.txt";
-                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filename2);
 
-                SQLiteDatabase db = getApplicationContext().openOrCreateDatabase("inventory.db", Context.MODE_PRIVATE, null);
-                Cursor c = db.rawQuery("select * from inventory", null);
-                if (c.getCount() == 0) {
-                    Toast.makeText(getApplicationContext(), "Keine Daten gefunden!", Toast.LENGTH_LONG).show();
-
+                if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, CODE_WRITE_EXTERNAL_FILE);
+                } else {
+                    inventoryAuslesen();
                 }
-                StringBuffer buffer = new StringBuffer();
-                while(c.moveToNext()) {
-                    buffer.append(c.getString(0) + ";" + c.getString(1) + ";" + c.getString(2) + ";" + c.getString(3));
-                    buffer.append("\n");
-                    try {
-                        FileOutputStream fos = new FileOutputStream(file);
-                        PrintWriter out = new PrintWriter(new OutputStreamWriter(fos));
-                        out.println(buffer.toString());
-                        out.flush();
-                        out.close();
-                        fos.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-
-
-
                 return true;
+                /*
             case R.id.subitemPfadeAendern:
                 Intent intentpfadAendernAcitivity = new Intent(getBaseContext(), ChangePathActivity.class);
                 startActivity(intentpfadAendernAcitivity);
                 return true;
+                 */
             case R.id.subitemUebersicht:
                 Intent intentUebersichtActivity = new Intent(getBaseContext(), OverviewActivity.class);
                 startActivity(intentUebersichtActivity);
@@ -235,6 +217,41 @@ public class MainActivity extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void inventoryAuslesen() {
+        String filename2 = "invCeDaten.txt";
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filename2);
+
+
+        Cursor c = inventoryDB.rawQuery(InventoryTbl.STMT_SELECT, null);
+        if (c.getCount() == 0) {
+            Toast.makeText(getApplicationContext(), "Keine Daten gefunden!", Toast.LENGTH_LONG).show();
+
+        }
+        StringBuffer buffer = new StringBuffer();
+        while(c.moveToNext()) {
+            buffer.append(c.getString(0) + ";" + c.getString(1) + ";" + c.getString(2) + ";" + c.getString(3));
+            buffer.append("\n");
+            try {
+                FileOutputStream fos = new FileOutputStream(file);
+                PrintWriter out = new PrintWriter(new OutputStreamWriter(fos));
+                out.println(buffer.toString());
+                out.flush();
+                out.close();
+                fos.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void stammdatenEinlesen() {
+        myFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        myFileIntent.setType("*/*");
+        startActivityForResult(myFileIntent, 10);
     }
 
 
@@ -252,7 +269,25 @@ public class MainActivity extends AppCompatActivity {
             case 10:
                 if (resultCode == RESULT_OK) {
                     String path = data.getData().getPath(); //pfad
-                    stammdatedPfad = path;
+                    stammdatenPfad = path;
+                    String tempPath = (stammdatenPfad.split(":"))[1];
+                    try {
+
+                        File file = new File(tempPath);
+                        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+                        String line;
+
+                        while ((line = br.readLine()) != null) {
+                            String[] stammdatenArray = line.split(";");
+                            stammdatenDB.execSQL(StammdatenTbl.STMT_INSERT_STAMM, new Object[]{stammdatenArray[0], stammdatenArray[1]});
+                        }
+
+                        br.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 break;
         }
@@ -310,5 +345,20 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CODE_READ_EXTERNAL_FILE) {
+            if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+            } else {
+                stammdatenEinlesen();
+            }
+        }
+        if(requestCode == CODE_WRITE_EXTERNAL_FILE) {
+            if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+            } else {
+                inventoryAuslesen();
+            }
+        }
+    }
 }
