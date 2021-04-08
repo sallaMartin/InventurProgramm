@@ -178,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
                                 snackbar.show();
                             }
                             anzahlQuery();
+
                         }
                     });
 
@@ -323,6 +324,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+        c.close();
 
     }
 
