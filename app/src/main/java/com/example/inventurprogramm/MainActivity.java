@@ -148,9 +148,6 @@ public class MainActivity extends AppCompatActivity {
                     alertDialogBuilder.setView(customLayout);
                     alertDialogBuilder.setCancelable(false);
 
-
-
-
                     alertDialogBuilder.setPositiveButton("JA", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -180,15 +177,7 @@ public class MainActivity extends AppCompatActivity {
                                 sbView.setBackgroundColor(myColor);
                                 snackbar.show();
                             }
-
-
-
-                            inventoryDB.execSQL(InventoryTbl.STMT_INSERT, new Object[]{tempEAN, tempBezeichnung, tempMenge, tempLagerort});
-                            plainTextEan.getEditText().setText("");
-                            plainTextLagerort.getEditText().setText("");
-                            plainTextMenge.getEditText().setText("");
                             anzahlQuery();
-
                         }
                     });
 
