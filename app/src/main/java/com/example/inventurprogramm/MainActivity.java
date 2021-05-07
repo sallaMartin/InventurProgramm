@@ -38,10 +38,12 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -229,7 +231,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.subitemInfo:
-                String text = "Text1/nText2/ntext3";
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("Information");
                 builder.setIcon(android.R.drawable.ic_dialog_info);
@@ -248,10 +249,85 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.subitemDatenEinlesen:
 
+
                 if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, CODE_READ_EXTERNAL_FILE);
                 } else {
-                    stammdatenEinlesen();
+                    //stammdatenEinlesen();
+
+                    /*
+                    String tempPath = "";
+                    File file2 = new File("pfade.txt");
+                    BufferedReader br2 = null;
+                    try {
+                        br2 = new BufferedReader(new InputStreamReader(new FileInputStream(file2)));
+                        String line;
+
+                        while ((line = br2.readLine()) != null) {
+                            String[] stammdatenArray = line.split(";");
+                            tempPath = stammdatenArray[0];
+                        }
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                     */
+
+                    String tempPath = "";
+
+                    try {
+                        FileInputStream fis = openFileInput("pfade.txt");
+                        BufferedReader br2 = null;
+                        br2 = new BufferedReader(new InputStreamReader(fis));
+                        String line;
+                        while ((line = br2.readLine()) != null) {
+                            String[] stammdatenArray = line.split(";");
+                            tempPath = stammdatenArray[0];
+                        }
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    try {
+
+                        
+                        File file = new File(tempPath);
+                        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+                        String line;
+
+                        while ((line = br.readLine()) != null) {
+                            String[] stammdatenArray = line.split(";");
+                            stammdatenDB.execSQL(StammdatenTbl.STMT_INSERT_STAMM, new Object[]{stammdatenArray[0], stammdatenArray[1]});
+                            Snackbar snackbar = Snackbar.make(mainLayout, "Daten in der Datenbank gespeichert!" , Snackbar.LENGTH_LONG);
+                            View sbView = snackbar.getView();
+                            int myColor = getResources().getColor(R.color.colorPrimary);
+                            sbView.setBackgroundColor(myColor);
+                            snackbar.show();
+                        }
+
+                        br.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                        Snackbar snackbar = Snackbar.make(mainLayout, "Es ist ein Fehler aufgetreten! Fehlercode: " + e.toString() , Snackbar.LENGTH_LONG);
+                        View sbView = snackbar.getView();
+                        int myColor = getResources().getColor(R.color.colorAccent);
+                        sbView.setBackgroundColor(myColor);
+                        snackbar.show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Snackbar snackbar = Snackbar.make(mainLayout, "Es ist ein Fehler aufgetreten! Fehlercode: " + e.toString() , Snackbar.LENGTH_LONG);
+                        View sbView = snackbar.getView();
+                        int myColor = getResources().getColor(R.color.colorAccent);
+                        sbView.setBackgroundColor(myColor);
+                        snackbar.show();
+
+                    }
+                    anzahlQuery();
                 }
                 return true;
             case R.id.subitemDatenAusgeben:
@@ -348,6 +424,7 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case 10:
                 if (resultCode == RESULT_OK) {
+                    /*
                     String path = data.getData().getPath(); //pfad
                     stammdatenPfad = path;
                     String tempPath = (stammdatenPfad.split(":"))[1];
@@ -385,6 +462,8 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                     anzahlQuery();
+
+                     */
                 }
                 break;
         }
