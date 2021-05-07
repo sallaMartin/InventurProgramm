@@ -185,7 +185,26 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="2">
+        android:layout_weight="1">
+
+        <Button
+            android:id="@+id/testButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/buttonSpeichern"
+            android:textAllCaps="false"
+
+            android:textColor="#ffffff"
+            android:textSize="24sp" />
+
+
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
 
         <Button
             android:id="@+id/buttonSpeichernView"
@@ -196,6 +215,8 @@
 
             android:textColor="#ffffff"
             android:textSize="24sp" />
+
+
 
     </FrameLayout>
 
